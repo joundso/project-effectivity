@@ -26,6 +26,7 @@
 !/data/db/pgadmin_db_schema.png
 !/data/db/pgadmin_servers.json
 !/data/db/test.sql
+!/data/db/time_efforts.csv
 
 !/docker/
 /docker/*

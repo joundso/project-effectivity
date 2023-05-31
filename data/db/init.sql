@@ -5,9 +5,10 @@ BEGIN;
 DROP TABLE IF EXISTS public.projects;
 
 CREATE TABLE IF NOT EXISTS public.projects (
-    id integer NOT NULL,
+    id serial NOT NULL,
     project_name character varying NOT NULL,
-    sales_price_cent integer NOT NULL,
+    project_reference character varying,
+    sales_price_eur numeric,
     project_start timestamp with time zone,
     project_end timestamp with time zone,
     closed boolean NOT NULL DEFAULT false,
@@ -17,7 +18,7 @@ CREATE TABLE IF NOT EXISTS public.projects (
 DROP TABLE IF EXISTS public.employees;
 
 CREATE TABLE IF NOT EXISTS public.employees (
-    id integer NOT NULL,
+    id serial NOT NULL,
     first_name character varying,
     last_name character varying,
     employee_class integer,
@@ -27,19 +28,20 @@ CREATE TABLE IF NOT EXISTS public.employees (
 DROP TABLE IF EXISTS public.employee_class;
 
 CREATE TABLE IF NOT EXISTS public.employee_class (
-    id integer NOT NULL,
+    id serial NOT NULL,
     class_name character varying,
-    hourly_rate_cent integer,
+    hourly_rate_eur numeric,
     PRIMARY KEY (id)
 );
 
 DROP TABLE IF EXISTS public.time_efforts;
 
 CREATE TABLE IF NOT EXISTS public.time_efforts (
-    id integer NOT NULL,
+    id serial NOT NULL,
     employee_id integer,
     project_id integer,
-    time_spent_min integer,
+    time_spent_h numeric,
+    description character varying,
     datetime timestamp with time zone,
     PRIMARY KEY (id)
 );
@@ -47,9 +49,9 @@ CREATE TABLE IF NOT EXISTS public.time_efforts (
 DROP TABLE IF EXISTS public.invest_efforts;
 
 CREATE TABLE IF NOT EXISTS public.invest_efforts (
-    id integer NOT NULL,
+    id serial NOT NULL,
     project_id integer,
-    invest_cent integer,
+    invest_eur numeric,
     description character varying,
     datetime timestamp with time zone,
     PRIMARY KEY (id)
