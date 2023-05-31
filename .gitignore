@@ -1,0 +1,22 @@
+/*
+/*/
+
+!/.gitignore
+!/NEWS.md
+!/README.md
+
+!/.github
+/.github/*
+!/.github/workflows/
+/.github/workflows/*
+!/.github/workflows/*.yml
+
+!/docker/
+/docker/*
+!/docker/*_docker-compose.yaml
+
+!/.env
+
+## Ignore all log-related files:
+**/*[Ll]og*
+**/*.log
