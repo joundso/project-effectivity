@@ -13,11 +13,19 @@
 
 !/data/
 /data/*
-!/data/init.sql
-!/data/pgadmin_db_schema.json
-!/data/pgadmin_db_schema.png
-!/data/pgadmin_servers.json
-!/data/test.sql
+!/data/budibase
+/data/budibase/*
+!/data/budibase/budibase-client.js
+!/data/budibase/db.txt
+!/data/budibase/manifest.json
+!/data/db
+/data/db/*
+!/data/db/init.sql
+!/data/db/pgadmin_db_backup_with_data.sql
+!/data/db/pgadmin_db_schema.json
+!/data/db/pgadmin_db_schema.png
+!/data/db/pgadmin_servers.json
+!/data/db/test.sql
 
 !/docker/
 /docker/*

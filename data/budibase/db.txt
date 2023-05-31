@@ -1,0 +1,3033 @@
+{
+    "version": "1.2.10",
+    "db_type": "http",
+    "start_time": "2023-05-31T10:57:35.338Z",
+    "db_info": {
+        "db_name": "app_dev_3c29c4a4804446d38bd8690e95f3d44f",
+        "purge_seq": "0-g1AAAABXeJzLYWBgYMpgTmEQTM4vTc5ISXIwNDLXMwBCwxyQVB4LkGRoAFL_gSArkQGP2kSGpHqIoiwAtOgYRA",
+        "update_seq": "212-g1AAAACbeJzLYWBgYMpgTmEQTM4vTc5ISXIwNDLXMwBCwxyQVB4LkGRoAFL_gSArgzkxJhcowJ5maGZukJKCTR8e0xIZkuqhxlSAjUk1MExOSzTFpiELACrKKXs",
+        "sizes": {
+            "file": 1618338,
+            "external": 50406,
+            "active": 239268
+        },
+        "props": {},
+        "doc_del_count": 0,
+        "doc_count": 67,
+        "disk_format_version": 8,
+        "compact_running": false,
+        "cluster": {
+            "q": 2,
+            "n": 1,
+            "w": 1,
+            "r": 1
+        },
+        "instance_start_time": "0",
+        "host": "http://couchdb-service:5984/app_dev_3c29c4a4804446d38bd8690e95f3d44f/",
+        "auto_compaction": false,
+        "adapter": "http"
+    }
+}
+{
+    "docs": [
+        {
+            "_id": "_design/database",
+            "_rev": "4-0dc5a39b39a92abaa5deaf1578a7875e",
+            "views": {
+                "by_link": {
+                    "map": "function (doc) {\n                // everything in this must remain constant as its going to Pouch, no external variables\n                if (doc.type === \"link\") {\n                    let doc1 = doc.doc1;\n                    let doc2 = doc.doc2;\n                    // eslint-disable-next-line no-undef\n                    // @ts-ignore\n                    emit([doc1.tableId, doc1.rowId], {\n                        id: doc2.rowId,\n                        thisId: doc1.rowId,\n                        fieldName: doc1.fieldName,\n                    });\n                    // if linking to same table can't emit twice\n                    if (doc1.tableId !== doc2.tableId) {\n                        // eslint-disable-next-line no-undef\n                        // @ts-ignore\n                        emit([doc2.tableId, doc2.rowId], {\n                            id: doc1.rowId,\n                            thisId: doc2.rowId,\n                            fieldName: doc2.fieldName,\n                        });\n                    }\n                }\n            }"
+                },
+                "screen_routes": {
+                    "map": "function(doc) {\n      if (doc._id.startsWith(\"screen_\")) {\n        emit(doc._id, {\n          id: doc._id,\n          routing: doc.routing,\n        })\n      }\n    }"
+                }
+            },
+            "createdAt": "2023-05-30T15:14:19.404Z",
+            "updatedAt": "2023-05-30T15:14:19.498Z",
+            "indexes": {
+                "rows": {
+                    "index": "function (doc) {\n            function idx(input, prev) {\n                for (let key of Object.keys(input)) {\n                    let idxKey = prev != null ? `${prev}.${key}` : key;\n                    idxKey = idxKey.replace(/ /g, \"_\");\n                    if (Array.isArray(input[key])) {\n                        for (let val of input[key]) {\n                            if (typeof val !== \"object\") {\n                                // eslint-disable-next-line no-undef\n                                // @ts-ignore\n                                index(idxKey, val, { store: true });\n                            }\n                        }\n                    }\n                    else if (key === \"_id\" || key === \"_rev\" || input[key] == null) {\n                        continue;\n                    }\n                    if (typeof input[key] === \"string\") {\n                        // eslint-disable-next-line no-undef\n                        // @ts-ignore\n                        index(idxKey, input[key].toLowerCase(), { store: true });\n                    }\n                    else if (typeof input[key] !== \"object\") {\n                        // eslint-disable-next-line no-undef\n                        // @ts-ignore\n                        index(idxKey, input[key], { store: true });\n                    }\n                    else {\n                        idx(input[key], idxKey);\n                    }\n                }\n            }\n            if (doc._id.startsWith(\"ro_\")) {\n                // eslint-disable-next-line no-undef\n                // @ts-ignore\n                index(\"default\", doc._id);\n                idx(doc);\n            }\n        }",
+                    "analyzer": "keyword"
+                }
+            },
+            "_revisions": {
+                "start": 4,
+                "ids": [
+                    "0dc5a39b39a92abaa5deaf1578a7875e",
+                    "135775a2b209c6942167f69821a5f9b8",
+                    "ef0e8124a3654caa9d8e90c881dced8a",
+                    "ba81a4f55cf34058601d7b4ab8645ac3"
+                ]
+            }
+        },
+        {
+            "_id": "app_metadata",
+            "_rev": "59-f260db39f86bde8447dbfa9539374169",
+            "appId": "app_dev_3c29c4a4804446d38bd8690e95f3d44f",
+            "type": "app",
+            "version": "2.6.20",
+            "componentLibraries": [
+                "@budibase/standard-components"
+            ],
+            "name": "Win Lose Project Overview",
+            "url": "/win-lose-project-overview",
+            "instance": {
+                "_id": "app_dev_3c29c4a4804446d38bd8690e95f3d44f"
+            },
+            "tenantId": "default",
+            "updatedAt": "2023-05-31T10:51:48.102Z",
+            "createdAt": "2023-05-30T15:14:19.571Z",
+            "status": "development",
+            "navigation": {
+                "navigation": "Top",
+                "title": "My first app",
+                "navWidth": "Large",
+                "navBackground": "var(--spectrum-global-color-gray-100)",
+                "links": [
+                    {
+                        "url": "/home",
+                        "text": "Overview",
+                        "id": "qgylCVs4t",
+                        "roleId": null
+                    },
+                    {
+                        "id": "D6anw2cmk",
+                        "roleId": null,
+                        "text": "New Project",
+                        "url": "/projects"
+                    },
+                    {
+                        "text": "Capital protocol",
+                        "url": "/invest_efforts",
+                        "id": "yZoqIFaDR",
+                        "roleId": null
+                    },
+                    {
+                        "text": "Time protocol",
+                        "url": "/time_efforts",
+                        "id": "3Cot3JKxSa",
+                        "roleId": null
+                    }
+                ]
+            },
+            "theme": "spectrum--light",
+            "customTheme": {
+                "buttonBorderRadius": "16px"
+            },
+            "updatedBy": "us_1f5445e74d8044c3a2bd88a7223d32b6",
+            "icon": {},
+            "_revisions": {
+                "start": 59,
+                "ids": [
+                    "f260db39f86bde8447dbfa9539374169",
+                    "5f2ae6756664af798817f4030134556c",
+                    "60f948b3dd92c4003dc1fd662c9504ef",
+                    "af06f353fbb609b34dc12adcee446906",
+                    "88a14af88995a8d84bb1c89435e5f94c",
+                    "05d588379de568452b6429a69ad7c711",
+                    "90db663f9a10aadbe4203c7df0a8cf6f",
+                    "787f4350ef4ef0f21b2e007a12240d6b",
+                    "ddbba5e155e499c1ce08806946588b70",
+                    "05b71b6acd5f3f237e71e292db786acd",
+                    "e20d72b5cc113c9425d0b5f223205614",
+                    "e624ebfa0b180637ef18138c16dcc8a9",
+                    "9cc409bb03fc4993d2f206e622f2cc57",
+                    "adf070f67f5022c804c8b0b9215e448b",
+                    "17338bc5ace5bc6e02043fc95050b2f0",
+                    "b9c91c98d2b7b14d6c782b1bca1301cf",
+                    "b951e22c89aa414a9bd10b8a032ccc52",
+                    "95e60f5dfd695edfbf487fd44b4a590f",
+                    "137180118bd8618f108b246a0eb25fdc",
+                    "177ba744472e5aaf7a95b02192db18b0",
+                    "673b258f07dd57f165accc53c9ee5991",
+                    "1c2cf8c884096580000a95915757215e",
+                    "83e1cda91e68438d6b695bc2e2d91299",
+                    "14c6d35d53775046371afeb793bc18f3",
+                    "bb30a8dd7f6af25892ea09d726b509ef",
+                    "8cd3ebcb886114223f337fce2a48ff9e",
+                    "c3f3a997b54c684b3268b385edc92ed3",
+                    "fd76e38b0457f51df150e04df41442ca",
+                    "c1ca3b3596b32d3bbc9be9a891992c0a",
+                    "59fb4a8f6d59b3920d30c527e515c2e8",
+                    "8cfabd974477e0e02d08754b38c63d9c",
+                    "60bb494ba75798f4158fca635b724605",
+                    "7f4349263056d8f5d29f25a2db79bee7",
+                    "8e821c8618be956083114775cef9714f",
+                    "3bb2f85e9ecdbfcf7425c4131030aaf9",
+                    "47910b57591e1cb2875c406d5938fad2",
+                    "42d8d06e3222c21ccb67349877ace1f6",
+                    "306998efae4cc876ebe5359a0f2bf65f",
+                    "283e680a6c354f6e0985af68345451c8",
+                    "dffe6fcc197ebb794a8275a5862f3c03",
+                    "ad56e7548eeb8101298b133ef1301297",
+                    "c438f095a0139ce21b2b3b8cec17fdd3",
+                    "9733a12638e56d1f0099f301e44fa18b",
+                    "5c129673c152274c1706f67b4223c844",
+                    "269761904fbb73ee88a8d2a2ca245c94",
+                    "c04a3a5a3130e8efadddc91fe3f2c4a9",
+                    "a78d073453dcf80a52b6f93ce0fd20c1",
+                    "f47ae6030d50b55a51ecaee5e3bf0859",
+                    "263be807e97930cd9195fc9834fc6f5d",
+                    "bd87d66a36c494ba4e6ed87100e9bd08",
+                    "84bfcc8ccb191757e11eb2342a61514d",
+                    "0141065742054752e6e1f3722f72b71d",
+                    "0bc8d7caf2298e119a23e5f5c5342bc9",
+                    "94c51291b3548000e5ae6da17bb23595",
+                    "a88d7710dd7a521b6b0f0147a64b6e34",
+                    "25a63ef08c5b283f098cf05c79cc48d6",
+                    "4166ef8728d808d3ed57f34b50f225e2",
+                    "99d76f1c26eaf4c80185255bf0d212e4",
+                    "7f77309022eaefc160b7493f15784346"
+                ]
+            }
+        },
+        {
+            "_id": "au_be86656f32bb4f7fbd219b84a730a902",
+            "_rev": "8-e99b82025591abc5a5e4279a789bdb53",
+            "name": "Update invested time",
+            "type": "automation",
+            "definition": {
+                "steps": [
+                    {
+                        "name": "Update Row",
+                        "tagline": "Update a {{inputs.enriched.table.name}} row",
+                        "icon": "Refresh",
+                        "description": "Update a row in your database",
+                        "type": "ACTION",
+                        "internal": true,
+                        "stepId": "UPDATE_ROW",
+                        "inputs": {
+                            "row": {
+                                "tableId": "datasource_plus_92abbf33b17c4538b02217b8c753fceb__projects",
+                                "id": "",
+                                "sales_price_cent": "",
+                                "project_start": "",
+                                "project_end": "",
+                                "closed": "",
+                                "project_name": "",
+                                "time_efforts": "",
+                                "invest_efforts": ""
+                            }
+                        },
+                        "schema": {
+                            "inputs": {
+                                "properties": {
+                                    "meta": {
+                                        "type": "object",
+                                        "title": "Field settings"
+                                    },
+                                    "row": {
+                                        "type": "object",
+                                        "customType": "row",
+                                        "title": "Table"
+                                    },
+                                    "rowId": {
+                                        "type": "string",
+                                        "title": "Row ID"
+                                    }
+                                },
+                                "required": [
+                                    "row",
+                                    "rowId"
+                                ]
+                            },
+                            "outputs": {
+                                "properties": {
+                                    "row": {
+                                        "type": "object",
+                                        "customType": "row",
+                                        "description": "The updated row"
+                                    },
+                                    "response": {
+                                        "type": "object",
+                                        "description": "The response from the table"
+                                    },
+                                    "success": {
+                                        "type": "boolean",
+                                        "description": "Whether the action was successful"
+                                    },
+                                    "id": {
+                                        "type": "string",
+                                        "description": "The identifier of the updated row"
+                                    },
+                                    "revision": {
+                                        "type": "string",
+                                        "description": "The revision of the updated row"
+                                    }
+                                },
+                                "required": [
+                                    "success",
+                                    "id",
+                                    "revision"
+                                ]
+                            }
+                        },
+                        "id": "WUF7xPnN-",
+                        "rowControl": false
+                    }
+                ],
+                "trigger": {
+                    "name": "Row Created",
+                    "event": "row:save",
+                    "icon": "TableRowAddBottom",
+                    "tagline": "Row is added to {{inputs.enriched.table.name}}",
+                    "description": "Fired when a row is added to your database",
+                    "stepId": "ROW_SAVED",
+                    "inputs": {
+                        "tableId": "datasource_plus_92abbf33b17c4538b02217b8c753fceb__time_efforts"
+                    },
+                    "schema": {
+                        "inputs": {
+                            "properties": {
+                                "tableId": {
+                                    "type": "string",
+                                    "customType": "table",
+                                    "title": "Table"
+                                }
+                            },
+                            "required": [
+                                "tableId"
+                            ]
+                        },
+                        "outputs": {
+                            "properties": {
+                                "row": {
+                                    "type": "object",
+                                    "customType": "row",
+                                    "description": "The new row that was created"
+                                },
+                                "id": {
+                                    "type": "string",
+                                    "description": "Row ID - can be used for updating"
+                                },
+                                "revision": {
+                                    "type": "string",
+                                    "description": "Revision of row"
+                                }
+                            },
+                            "required": [
+                                "row",
+                                "id"
+                            ]
+                        }
+                    },
+                    "type": "TRIGGER",
+                    "id": "lSYKX1M1y"
+                }
+            },
+            "appId": "app_dev_3c29c4a4804446d38bd8690e95f3d44f",
+            "createdAt": "2023-05-31T09:09:11.090Z",
+            "updatedAt": "2023-05-31T09:11:13.457Z",
+            "_revisions": {
+                "start": 8,
+                "ids": [
+                    "e99b82025591abc5a5e4279a789bdb53",
+                    "952178519ad3f4f517c2fa955d0587e4",
+                    "169668fe9369b5dda6427e6a1f36517e",
+                    "d6f1ab522291091d7a85ece5a77710c3",
+                    "2eb70a95e1efd57d90e24a5b50572e34",
+                    "3ca6b54940e156f9e11f68b09e172bdd",
+                    "fc8117787e9024e43d2626122dac429d",
+                    "0840aa29115456148b6096589be9a00e"
+                ]
+            }
+        },
+        {
+            "_id": "datasource_internal_bb_default",
+            "_rev": "1-095daa3b487cd6bcbb292fb9b8212d31",
+            "type": "budibase",
+            "name": "Sample Data",
+            "source": "BUDIBASE",
+            "config": {},
+            "updatedAt": "2023-05-30T15:14:19.544Z",
+            "createdAt": "2023-05-30T15:14:19.544Z"
+        },
+        {
+            "_id": "datasource_plus_92abbf33b17c4538b02217b8c753fceb",
+            "_rev": "20-2f2a9d70fd4ee457d3da921282dad93f",
+            "type": "datasource_plus",
+            "source": "POSTGRES",
+            "config": {
+                "host": "postgres",
+                "port": "5432",
+                "database": "postgres",
+                "user": "postgres",
+                "password": "changeme",
+                "schema": "public",
+                "ssl": false,
+                "rejectUnauthorized": false,
+                "ca": false
+            },
+            "name": "PostgreSQL",
+            "plus": true,
+            "entities": {
+                "employee_class": {
+                    "type": "table",
+                    "_id": "datasource_plus_92abbf33b17c4538b02217b8c753fceb__employee_class",
+                    "primary": [
+                        "id"
+                    ],
+                    "name": "employee_class",
+                    "schema": {
+                        "id": {
+                            "autocolumn": false,
+                            "name": "id",
+                            "constraints": {
+                                "presence": true
+                            },
+                            "type": "number",
+                            "externalType": "integer"
+                        },
+                        "hourly_rate_cent": {
+                            "autocolumn": false,
+                            "name": "hourly_rate_cent",
+                            "constraints": {
+                                "presence": false
+                            },
+                            "type": "number",
+                            "externalType": "integer"
+                        },
+                        "class_name": {
+                            "autocolumn": false,
+                            "name": "class_name",
+                            "constraints": {
+                                "presence": false
+                            },
+                            "type": "string",
+                            "externalType": "character varying"
+                        },
+                        "employees_relation": {
+                            "tableId": "datasource_plus_92abbf33b17c4538b02217b8c753fceb__employees",
+                            "name": "employees_relation",
+                            "relationshipType": "many-to-one",
+                            "fieldName": "employee_class",
+                            "type": "link",
+                            "main": true,
+                            "_id": "c8c2a8a1dbcaf494ba9bc4bfbb27c69b0",
+                            "foreignKey": "id"
+                        }
+                    },
+                    "primaryDisplay": "class_name",
+                    "sql": true
+                },
+                "employees": {
+                    "type": "table",
+                    "_id": "datasource_plus_92abbf33b17c4538b02217b8c753fceb__employees",
+                    "primary": [
+                        "id"
+                    ],
+                    "name": "employees",
+                    "schema": {
+                        "id": {
+                            "autocolumn": false,
+                            "name": "id",
+                            "constraints": {
+                                "presence": true
+                            },
+                            "type": "number",
+                            "externalType": "integer"
+                        },
+                        "employee_class": {
+                            "autocolumn": false,
+                            "name": "employee_class",
+                            "constraints": {
+                                "presence": false
+                            },
+                            "type": "number",
+                            "externalType": "integer"
+                        },
+                        "last_name": {
+                            "autocolumn": false,
+                            "name": "last_name",
+                            "constraints": {
+                                "presence": false
+                            },
+                            "type": "string",
+                            "externalType": "character varying"
+                        },
+                        "first_name": {
+                            "autocolumn": false,
+                            "name": "first_name",
+                            "constraints": {
+                                "presence": false
+                            },
+                            "type": "string",
+                            "externalType": "character varying"
+                        },
+                        "employee_class_relation": {
+                            "relationshipType": "one-to-many",
+                            "tableId": "datasource_plus_92abbf33b17c4538b02217b8c753fceb__employee_class",
+                            "name": "employee_class_relation",
+                            "type": "link",
+                            "_id": "c8c2a8a1dbcaf494ba9bc4bfbb27c69b0",
+                            "foreignKey": "employee_class",
+                            "fieldName": "id"
+                        },
+                        "time_efforts": {
+                            "tableId": "datasource_plus_92abbf33b17c4538b02217b8c753fceb__time_efforts",
+                            "name": "time_efforts",
+                            "relationshipType": "many-to-one",
+                            "fieldName": "employee_id",
+                            "type": "link",
+                            "main": true,
+                            "_id": "ce93cc2c3cb754312b8c2afc0f0fd2444",
+                            "foreignKey": "id"
+                        }
+                    },
+                    "primaryDisplay": "last_name",
+                    "sql": true
+                },
+                "invest_efforts": {
+                    "type": "external",
+                    "_id": "datasource_plus_92abbf33b17c4538b02217b8c753fceb__invest_efforts",
+                    "primary": [
+                        "id"
+                    ],
+                    "name": "invest_efforts",
+                    "schema": {
+                        "datetime": {
+                            "autocolumn": false,
+                            "name": "datetime",
+                            "constraints": {
+                                "presence": false
+                            },
+                            "type": "datetime",
+                            "dateOnly": false,
+                            "timeOnly": false,
+                            "externalType": "timestamp with time zone",
+                            "visible": true,
+                            "width": 200
+                        },
+                        "id": {
+                            "autocolumn": false,
+                            "name": "id",
+                            "constraints": {
+                                "presence": true
+                            },
+                            "type": "number",
+                            "externalType": "integer",
+                            "order": 1,
+                            "visible": true,
+                            "width": 200
+                        },
+                        "project_id": {
+                            "autocolumn": false,
+                            "name": "project_id",
+                            "constraints": {
+                                "presence": false
+                            },
+                            "type": "number",
+                            "externalType": "integer",
+                            "order": 2,
+                            "visible": true,
+                            "width": 200
+                        },
+                        "invest_cent": {
+                            "autocolumn": false,
+                            "name": "invest_cent",
+                            "constraints": {
+                                "presence": false
+                            },
+                            "type": "number",
+                            "externalType": "integer",
+                            "order": 3,
+                            "visible": true,
+                            "width": 200
+                        },
+                        "projects": {
+                            "relationshipType": "one-to-many",
+                            "tableId": "datasource_plus_92abbf33b17c4538b02217b8c753fceb__projects",
+                            "name": "projects",
+                            "type": "link",
+                            "_id": "ce35959f9694843dabc537a041b0bb16f",
+                            "foreignKey": "project_id",
+                            "fieldName": "id",
+                            "order": 0,
+                            "visible": true,
+                            "width": 200
+                        },
+                        "invest_eur": {
+                            "type": "formula",
+                            "constraints": {},
+                            "name": "invest_eur",
+                            "formulaType": "dynamic",
+                            "formula": "{{ div[id]e [invest_cent] \"100\" }}",
+                            "order": 4,
+                            "visible": true,
+                            "width": 200
+                        }
+                    },
+                    "primaryDisplay": "datetime",
+                    "sourceId": "datasource_plus_92abbf33b17c4538b02217b8c753fceb",
+                    "sql": true,
+                    "indexes": []
+                },
+                "projects": {
+                    "type": "table",
+                    "_id": "datasource_plus_92abbf33b17c4538b02217b8c753fceb__projects",
+                    "primary": [
+                        "id"
+                    ],
+                    "name": "projects",
+                    "schema": {
+                        "id": {
+                            "autocolumn": false,
+                            "name": "id",
+                            "constraints": {
+                                "presence": true
+                            },
+                            "type": "number",
+                            "externalType": "integer",
+                            "visible": true,
+                            "width": 108
+                        },
+                        "sales_price_cent": {
+                            "autocolumn": false,
+                            "name": "sales_price_cent",
+                            "constraints": {
+                                "presence": false
+                            },
+                            "type": "number",
+                            "externalType": "integer",
+                            "order": 2,
+                            "visible": true,
+                            "width": 200
+                        },
+                        "project_start": {
+                            "autocolumn": false,
+                            "name": "project_start",
+                            "constraints": {
+                                "presence": false
+                            },
+                            "type": "datetime",
+                            "dateOnly": false,
+                            "timeOnly": false,
+                            "externalType": "timestamp with time zone",
+                            "order": 3,
+                            "visible": true,
+                            "width": 200
+                        },
+                        "project_end": {
+                            "autocolumn": false,
+                            "name": "project_end",
+                            "constraints": {
+                                "presence": false
+                            },
+                            "type": "datetime",
+                            "dateOnly": false,
+                            "timeOnly": false,
+                            "externalType": "timestamp with time zone",
+                            "order": 4,
+                            "visible": true,
+                            "width": 200
+                        },
+                        "closed": {
+                            "autocolumn": false,
+                            "name": "closed",
+                            "constraints": {
+                                "presence": false
+                            },
+                            "type": "boolean",
+                            "externalType": "boolean",
+                            "order": 5,
+                            "visible": true,
+                            "width": 200
+                        },
+                        "project_name": {
+                            "autocolumn": false,
+                            "name": "project_name",
+                            "constraints": {
+                                "presence": false
+                            },
+                            "type": "string",
+                            "externalType": "character varying",
+                            "order": 6,
+                            "visible": true,
+                            "width": 200
+                        },
+                        "time_efforts": {
+                            "tableId": "datasource_plus_92abbf33b17c4538b02217b8c753fceb__time_efforts",
+                            "name": "time_efforts",
+                            "relationshipType": "many-to-one",
+                            "fieldName": "project_id",
+                            "type": "link",
+                            "main": true,
+                            "_id": "cce5d19750d8143da813e602720e107ef",
+                            "foreignKey": "id",
+                            "order": 0,
+                            "visible": true,
+                            "width": 200
+                        },
+                        "invest_efforts": {
+                            "tableId": "datasource_plus_92abbf33b17c4538b02217b8c753fceb__invest_efforts",
+                            "name": "invest_efforts",
+                            "relationshipType": "many-to-one",
+                            "fieldName": "project_id",
+                            "type": "link",
+                            "main": true,
+                            "_id": "ce35959f9694843dabc537a041b0bb16f",
+                            "foreignKey": "id",
+                            "order": 1,
+                            "visible": true,
+                            "width": 200
+                        }
+                    },
+                    "primaryDisplay": "project_name",
+                    "sql": true
+                },
+                "time_efforts": {
+                    "type": "table",
+                    "_id": "datasource_plus_92abbf33b17c4538b02217b8c753fceb__time_efforts",
+                    "primary": [
+                        "id"
+                    ],
+                    "name": "time_efforts",
+                    "schema": {
+                        "id": {
+                            "autocolumn": false,
+                            "name": "id",
+                            "constraints": {
+                                "presence": true
+                            },
+                            "type": "number",
+                            "externalType": "integer",
+                            "visible": true,
+                            "width": 200
+                        },
+                        "employee_id": {
+                            "autocolumn": false,
+                            "name": "employee_id",
+                            "constraints": {
+                                "presence": false
+                            },
+                            "type": "number",
+                            "externalType": "integer",
+                            "order": 2,
+                            "visible": true,
+                            "width": 200
+                        },
+                        "project_id": {
+                            "autocolumn": false,
+                            "name": "project_id",
+                            "constraints": {
+                                "presence": false
+                            },
+                            "type": "number",
+                            "externalType": "integer",
+                            "order": 3,
+                            "visible": true,
+                            "width": 200
+                        },
+                        "time_spent_min": {
+                            "autocolumn": false,
+                            "name": "time_spent_min",
+                            "constraints": {
+                                "presence": false
+                            },
+                            "type": "number",
+                            "externalType": "integer",
+                            "order": 4,
+                            "visible": true,
+                            "width": 200
+                        },
+                        "datetime": {
+                            "autocolumn": false,
+                            "name": "datetime",
+                            "constraints": {
+                                "presence": false
+                            },
+                            "type": "datetime",
+                            "dateOnly": false,
+                            "timeOnly": false,
+                            "externalType": "timestamp with time zone",
+                            "order": 5,
+                            "visible": true,
+                            "width": 200
+                        },
+                        "employees": {
+                            "relationshipType": "one-to-many",
+                            "tableId": "datasource_plus_92abbf33b17c4538b02217b8c753fceb__employees",
+                            "name": "employees",
+                            "type": "link",
+                            "_id": "ce93cc2c3cb754312b8c2afc0f0fd2444",
+                            "foreignKey": "employee_id",
+                            "fieldName": "id",
+                            "order": 0,
+                            "visible": true,
+                            "width": 200
+                        },
+                        "projects": {
+                            "relationshipType": "one-to-many",
+                            "tableId": "datasource_plus_92abbf33b17c4538b02217b8c753fceb__projects",
+                            "name": "projects",
+                            "type": "link",
+                            "_id": "cce5d19750d8143da813e602720e107ef",
+                            "foreignKey": "project_id",
+                            "fieldName": "id",
+                            "order": 1,
+                            "visible": true,
+                            "width": 200
+                        }
+                    },
+                    "primaryDisplay": "id",
+                    "sql": true
+                }
+            },
+            "createdAt": "2023-05-31T08:27:21.529Z",
+            "updatedAt": "2023-05-31T10:51:50.640Z",
+            "_revisions": {
+                "start": 20,
+                "ids": [
+                    "2f2a9d70fd4ee457d3da921282dad93f",
+                    "909858674024b9745dba81dff163686b",
+                    "22bc3b2d2f4acc2f501eb86d18d00567",
+                    "f28aa5abf8bd39ebbe6ed6bc02e986fc",
+                    "6a78b6f9a06e257764a92e786e01b0ac",
+                    "9d217cda35948a85e8ebece1f01f6799",
+                    "0f22a515b4283d1a4f0db6e0b3aae45f",
+                    "7cbc1f8b84c0db139efb1c91f7f2ad9a",
+                    "1a0b07fe528f4d0287c4a0c1f5a638f9",
+                    "7cba04cc09eed7216c8372c442d27a1d",
+                    "1b747b9d22e8dceadb55a3354c7e5aa8",
+                    "81a5b7922b23836e157c69c754088298",
+                    "9da81ed1cc5f73c541ba7ba7a6dbcaa3",
+                    "adb83ad975954bc277c1a3e974bb351f",
+                    "55e9e572c6aa6221c1a5536f3a5c308c",
+                    "497c14086c63c718e2386217b83dd201",
+                    "5177bf96ae55e4202338167bf15ca823",
+                    "8736179cc13418b2c38f7e374df613af",
+                    "282cfad350525e9838e5f87f6dd1c074",
+                    "a9fa113985f3330ee31c15642e5f1058"
+                ]
+            }
+        },
+        {
+            "_id": "li_ta_bb_employee_ta_bb_jobs_ro_ta_bb_employee_168d26520fd145e6aef1661b3bc9eafe_ro_ta_bb_jobs_cc90a95cad8e45778621edcc5736fd93_Jobs_Assigned",
+            "_rev": "1-6eabe9515f75e22d06f7e8a3d5f399e0",
+            "type": "link",
+            "doc1": {
+                "tableId": "ta_bb_employee",
+                "fieldName": "Jobs",
+                "rowId": "ro_ta_bb_employee_168d26520fd145e6aef1661b3bc9eafe"
+            },
+            "doc2": {
+                "tableId": "ta_bb_jobs",
+                "fieldName": "Assigned",
+                "rowId": "ro_ta_bb_jobs_cc90a95cad8e45778621edcc5736fd93"
+            }
+        },
+        {
+            "_id": "li_ta_bb_employee_ta_bb_jobs_ro_ta_bb_employee_38edf7ab6a3d4fc7b6512a152260b70b_ro_ta_bb_jobs_cde7b8836cfc4cf3b8993d9c762e8948_Jobs_Assigned",
+            "_rev": "1-b7fdfa3a2b9d666e75a5be81283e6648",
+            "type": "link",
+            "doc1": {
+                "tableId": "ta_bb_employee",
+                "fieldName": "Jobs",
+                "rowId": "ro_ta_bb_employee_38edf7ab6a3d4fc7b6512a152260b70b"
+            },
+            "doc2": {
+                "tableId": "ta_bb_jobs",
+                "fieldName": "Assigned",
+                "rowId": "ro_ta_bb_jobs_cde7b8836cfc4cf3b8993d9c762e8948"
+            }
+        },
+        {
+            "_id": "li_ta_bb_employee_ta_bb_jobs_ro_ta_bb_employee_4fec0ac3fc20453ea87492694c64e2d8_ro_ta_bb_jobs_1f621a0eb9dd4c9a9601f77f169ae4ea_Jobs_Assigned",
+            "_rev": "1-daa65d72f464463cf54d96a1115be3bd",
+            "type": "link",
+            "doc1": {
+                "tableId": "ta_bb_employee",
+                "fieldName": "Jobs",
+                "rowId": "ro_ta_bb_employee_4fec0ac3fc20453ea87492694c64e2d8"
+            },
+            "doc2": {
+                "tableId": "ta_bb_jobs",
+                "fieldName": "Assigned",
+                "rowId": "ro_ta_bb_jobs_1f621a0eb9dd4c9a9601f77f169ae4ea"
+            }
+        },
+        {
+            "_id": "li_ta_bb_employee_ta_bb_jobs_ro_ta_bb_employee_59ba5d1091144b22ab9a9f87737af43c_ro_ta_bb_jobs_0cb22ea9993b4a75843af4305c037591_Jobs_Assigned",
+            "_rev": "1-8f6ee1f00ace49324a2648ab033c1003",
+            "type": "link",
+            "doc1": {
+                "tableId": "ta_bb_employee",
+                "fieldName": "Jobs",
+                "rowId": "ro_ta_bb_employee_59ba5d1091144b22ab9a9f87737af43c"
+            },
+            "doc2": {
+                "tableId": "ta_bb_jobs",
+                "fieldName": "Assigned",
+                "rowId": "ro_ta_bb_jobs_0cb22ea9993b4a75843af4305c037591"
+            }
+        },
+        {
+            "_id": "li_ta_bb_employee_ta_bb_jobs_ro_ta_bb_employee_a84f61cc0e0a48fba1ec6d2d5fb0f129_ro_ta_bb_jobs_e7b1e59ddec84107bb2bb61d57803370_Jobs_Assigned",
+            "_rev": "1-f43e248a6ccaa85b400adeee7a854519",
+            "type": "link",
+            "doc1": {
+                "tableId": "ta_bb_employee",
+                "fieldName": "Jobs",
+                "rowId": "ro_ta_bb_employee_a84f61cc0e0a48fba1ec6d2d5fb0f129"
+            },
+            "doc2": {
+                "tableId": "ta_bb_jobs",
+                "fieldName": "Assigned",
+                "rowId": "ro_ta_bb_jobs_e7b1e59ddec84107bb2bb61d57803370"
+            }
+        },
+        {
+            "_id": "li_ta_bb_employee_ta_bb_jobs_ro_ta_bb_employee_b69bd27afef14adcbe2cb6a66c88341b_ro_ta_bb_jobs_650a12125c224657ac898e40ae0c26af_Jobs_Assigned",
+            "_rev": "1-a85c80cd41dcddef34b6ef74a32867c5",
+            "type": "link",
+            "doc1": {
+                "tableId": "ta_bb_employee",
+                "fieldName": "Jobs",
+                "rowId": "ro_ta_bb_employee_b69bd27afef14adcbe2cb6a66c88341b"
+            },
+            "doc2": {
+                "tableId": "ta_bb_jobs",
+                "fieldName": "Assigned",
+                "rowId": "ro_ta_bb_jobs_650a12125c224657ac898e40ae0c26af"
+            }
+        },
+        {
+            "_id": "li_ta_bb_employee_ta_bb_jobs_ro_ta_bb_employee_d1a38ae9ea4f4afd8e3f287511fe9269_ro_ta_bb_jobs_05d24de5ae6a491cb70000ea9313e704_Jobs_Assigned",
+            "_rev": "1-15270695d1b57099bbe4558fad4dee23",
+            "type": "link",
+            "doc1": {
+                "tableId": "ta_bb_employee",
+                "fieldName": "Jobs",
+                "rowId": "ro_ta_bb_employee_d1a38ae9ea4f4afd8e3f287511fe9269"
+            },
+            "doc2": {
+                "tableId": "ta_bb_jobs",
+                "fieldName": "Assigned",
+                "rowId": "ro_ta_bb_jobs_05d24de5ae6a491cb70000ea9313e704"
+            }
+        },
+        {
+            "_id": "li_ta_bb_employee_ta_bb_jobs_ro_ta_bb_employee_dac239bd4d0742a885096ffc660205ec_ro_ta_bb_jobs_f6f97bc3463e47679f53e0a4b8381c90_Jobs_Assigned",
+            "_rev": "1-063357d2857a3eb07aac9840a79ddd9c",
+            "type": "link",
+            "doc1": {
+                "tableId": "ta_bb_employee",
+                "fieldName": "Jobs",
+                "rowId": "ro_ta_bb_employee_dac239bd4d0742a885096ffc660205ec"
+            },
+            "doc2": {
+                "tableId": "ta_bb_jobs",
+                "fieldName": "Assigned",
+                "rowId": "ro_ta_bb_jobs_f6f97bc3463e47679f53e0a4b8381c90"
+            }
+        },
+        {
+            "_id": "li_ta_bb_employee_ta_bb_jobs_ro_ta_bb_employee_e3627aee001e43b29aadf39023cd556c_ro_ta_bb_jobs_eca9bd5218f846b1b94fca6a905e6f0a_Jobs_Assigned",
+            "_rev": "1-cc66fb64a304b89c5eeda82ca9a88232",
+            "type": "link",
+            "doc1": {
+                "tableId": "ta_bb_employee",
+                "fieldName": "Jobs",
+                "rowId": "ro_ta_bb_employee_e3627aee001e43b29aadf39023cd556c"
+            },
+            "doc2": {
+                "tableId": "ta_bb_jobs",
+                "fieldName": "Assigned",
+                "rowId": "ro_ta_bb_jobs_eca9bd5218f846b1b94fca6a905e6f0a"
+            }
+        },
+        {
+            "_id": "li_ta_bb_employee_ta_bb_jobs_ro_ta_bb_employee_f7b6fda9a37f4fffaf9b489f29cd5bfd_ro_ta_bb_jobs_4b79c07ddb35410396c51ad09b44d249_Jobs_Assigned",
+            "_rev": "1-840f0e0850b440ce4c7f2db97cba6373",
+            "type": "link",
+            "doc1": {
+                "tableId": "ta_bb_employee",
+                "fieldName": "Jobs",
+                "rowId": "ro_ta_bb_employee_f7b6fda9a37f4fffaf9b489f29cd5bfd"
+            },
+            "doc2": {
+                "tableId": "ta_bb_jobs",
+                "fieldName": "Assigned",
+                "rowId": "ro_ta_bb_jobs_4b79c07ddb35410396c51ad09b44d249"
+            }
+        },
+        {
+            "_id": "migrations",
+            "_rev": "3-4f1699b02c8444186b6df00999314108",
+            "app_urls": 1685459659767,
+            "createdAt": "2023-05-30T15:14:19.771Z",
+            "updatedAt": "2023-05-30T15:14:19.814Z",
+            "event_app_backfill": 1685459659790,
+            "table_settings_links_to_actions": 1685459659811,
+            "_revisions": {
+                "start": 3,
+                "ids": [
+                    "4f1699b02c8444186b6df00999314108",
+                    "dc2eb5ce3c5b0cae143dd7a2a3694821",
+                    "60b7afb9bb510aa568ca31b506a9967d"
+                ]
+            }
+        },
+        {
+            "_id": "query_datasource_plus_92abbf33b17c4538b02217b8c753fceb_946e6ace31ed44e4b22e415bac83e2ad",
+            "_rev": "1-c195246741998a25e12bbe4cd5502b6c",
+            "datasourceId": "datasource_plus_92abbf33b17c4538b02217b8c753fceb",
+            "parameters": [],
+            "fields": {
+                "sql": "select\n\tp.id,\n\tp.project_name,\n\tp.sales_price_cent / 100 as sales_price_eur,\n\tsum(ie.invest_cent)/ 100 as invest_eur,\n\tsum((te.time_spent_min / 60)*(ec.hourly_rate_cent / 100)) as time_invest_eur,\n\tsum(te.time_spent_min / 60) as time_invest_hours\nfrom\n\tprojects p\nleft join invest_efforts ie on\n\tp.id = ie.project_id\nleft join time_efforts te on \n\tp.id = te.project_id\nleft join employees e on\n\tte.employee_id = e.id\nleft join employee_class ec on\n\te.employee_class = ec.id\ngroup by\n\tp.id;"
+            },
+            "queryVerb": "read",
+            "transformer": "return data",
+            "schema": {
+                "id": {
+                    "name": "id",
+                    "type": "number"
+                },
+                "project_name": {
+                    "name": "project_name",
+                    "type": "string"
+                },
+                "sales_price_eur": {
+                    "name": "sales_price_eur",
+                    "type": "number"
+                },
+                "invest_eur": {
+                    "name": "invest_eur",
+                    "type": "number"
+                },
+                "time_invest_eur": {
+                    "name": "time_invest_eur",
+                    "type": "number"
+                },
+                "time_invest_hours": {
+                    "name": "time_invest_hours",
+                    "type": "number"
+                }
+            },
+            "name": "Project Overview_SQL",
+            "createdAt": "2023-05-31T09:49:31.502Z",
+            "updatedAt": "2023-05-31T09:49:31.502Z"
+        },
+        {
+            "_id": "ro_ta_bb_employee_168d26520fd145e6aef1661b3bc9eafe",
+            "_rev": "1-f7d9fc3b3efefb5a4757007be01894d4",
+            "First Name": "Julie",
+            "Last Name": "Jimenez",
+            "Email": "julie.jimenez@example.com",
+            "Address": "4250 New Street",
+            "City": "Stevenage",
+            "Postcode": "EE32 3SE",
+            "Phone": "01754 13523",
+            "Created At": "2023-05-30T15:14:19.540Z",
+            "Updated At": "2023-05-30T15:14:19.540Z",
+            "tableId": "ta_bb_employee",
+            "type": "row",
+            "Employee Level": [
+                "Senior"
+            ],
+            "Start Date": "2015-02-12T12:00:00.000",
+            "EMPLOYEE ID": 1
+        },
+        {
+            "_id": "ro_ta_bb_employee_38edf7ab6a3d4fc7b6512a152260b70b",
+            "_rev": "1-3eea82275155eee16afa34c2ed82f620",
+            "First Name": "Holly",
+            "Last Name": "Carroll",
+            "Email": "holly.carroll@example.com",
+            "Address": "5976 Springfield Road",
+            "City": "Edinburgh",
+            "Postcode": "Y4 2LH",
+            "Phone": "016977 73053",
+            "Created At": "2023-05-30T15:14:19.540Z",
+            "Updated At": "2023-05-30T15:14:19.540Z",
+            "tableId": "ta_bb_employee",
+            "type": "row",
+            "Employee Level": [
+                "Senior"
+            ],
+            "Start Date": "2022-02-12T12:00:00.000",
+            "EMPLOYEE ID": 3
+        },
+        {
+            "_id": "ro_ta_bb_employee_4fec0ac3fc20453ea87492694c64e2d8",
+            "_rev": "1-c66e34077456f03674bf5b9b561efc34",
+            "First Name": "Brayden",
+            "Last Name": "Carpenter",
+            "Email": "brayden.carpenter@example.com",
+            "Address": "8755 The Drive",
+            "City": "Bradford",
+            "Postcode": "YH5 8RY",
+            "Phone": "015395 12426",
+            "Created At": "2023-05-30T15:14:19.541Z",
+            "Updated At": "2023-05-30T15:14:19.541Z",
+            "tableId": "ta_bb_employee",
+            "type": "row",
+            "Employee Level": [
+                "Contractor"
+            ],
+            "Start Date": "2022-11-09T12:00:00.000",
+            "EMPLOYEE ID": 10
+        },
+        {
+            "_id": "ro_ta_bb_employee_59ba5d1091144b22ab9a9f87737af43c",
+            "_rev": "1-5ff566bd38e0a0f4048a6d211414d570",
+            "First Name": "Donald",
+            "Last Name": "Lynch",
+            "Email": "donald.lynch@example.com",
+            "Address": "9642 New Road",
+            "City": "St Albans",
+            "Postcode": "V9A 1NP",
+            "Phone": "015242 46760",
+            "Created At": "2023-05-30T15:14:19.540Z",
+            "Updated At": "2023-05-30T15:14:19.540Z",
+            "tableId": "ta_bb_employee",
+            "type": "row",
+            "Employee Level": [
+                "Junior"
+            ],
+            "Start Date": "2018-04-13T12:00:00.000",
+            "EMPLOYEE ID": 6
+        },
+        {
+            "_id": "ro_ta_bb_employee_a84f61cc0e0a48fba1ec6d2d5fb0f129",
+            "_rev": "1-2a4400a3957afa35a11184281bb182a6",
+            "First Name": "Richard",
+            "Last Name": "Kelley",
+            "Email": "richard.kelley@example.com",
+            "Address": "2346 York Road",
+            "City": "Leicester",
+            "Postcode": "H7S 1AH",
+            "Phone": "013873 65167",
+            "Created At": "2023-05-30T15:14:19.540Z",
+            "Updated At": "2023-05-30T15:14:19.540Z",
+            "tableId": "ta_bb_employee",
+            "type": "row",
+            "Employee Level": [
+                "Apprentice"
+            ],
+            "Start Date": "2020-07-09T12:00:00.000",
+            "EMPLOYEE ID": 5
+        },
+        {
+            "_id": "ro_ta_bb_employee_b69bd27afef14adcbe2cb6a66c88341b",
+            "_rev": "1-03df1fc52430056b46e3b502c70d9557",
+            "First Name": "Mandy",
+            "Last Name": "Clark",
+            "Email": "mandy.clark@example.com",
+            "Address": "8632 North Street",
+            "City": "Hereford",
+            "Postcode": "GT81 7DG",
+            "Phone": "016973 32814",
+            "Created At": "2023-05-30T15:14:19.540Z",
+            "Updated At": "2023-05-30T15:14:19.540Z",
+            "tableId": "ta_bb_employee",
+            "type": "row",
+            "Employee Level": [
+                "Senior"
+            ],
+            "Start Date": "2017-09-10T12:00:00.000",
+            "EMPLOYEE ID": 2
+        },
+        {
+            "_id": "ro_ta_bb_employee_d1a38ae9ea4f4afd8e3f287511fe9269",
+            "_rev": "1-b7025c5053165f68b932cedbea302507",
+            "First Name": "Suzy",
+            "Last Name": "Ruiz",
+            "Email": "suzy.ruiz@example.com",
+            "Address": "4641 Victoria Street",
+            "City": "Armagh",
+            "Postcode": "MO4X 8BP",
+            "Phone": "015242 79977",
+            "Created At": "2023-05-30T15:14:19.540Z",
+            "Updated At": "2023-05-30T15:14:19.540Z",
+            "tableId": "ta_bb_employee",
+            "type": "row",
+            "Employee Level": [
+                "Senior",
+                "Manager"
+            ],
+            "Start Date": "2019-05-01T12:00:00.000",
+            "EMPLOYEE ID": 8
+        },
+        {
+            "_id": "ro_ta_bb_employee_dac239bd4d0742a885096ffc660205ec",
+            "_rev": "1-596950f4f870a55eb63dc37792570078",
+            "First Name": "Maria",
+            "Last Name": "Torres",
+            "Email": "maria.torres@example.com",
+            "Address": "9998 New Road",
+            "City": "Aberdeen",
+            "Postcode": "LP7 8JQ",
+            "Phone": "0101 472 3365",
+            "Created At": "2023-05-30T15:14:19.540Z",
+            "Updated At": "2023-05-30T15:14:19.540Z",
+            "tableId": "ta_bb_employee",
+            "type": "row",
+            "Employee Level": [
+                "Manager"
+            ],
+            "Start Date": "2016-05-22T12:00:00.000",
+            "EMPLOYEE ID": 7
+        },
+        {
+            "_id": "ro_ta_bb_employee_e3627aee001e43b29aadf39023cd556c",
+            "_rev": "1-eb6d6d0c3f501f9028a77943fd1c11c1",
+            "First Name": "Francis",
+            "Last Name": "Castro",
+            "Email": "francis.castro@example.com",
+            "Address": "3970 High Street",
+            "City": "Wells",
+            "Postcode": "X12 6QA",
+            "Phone": "017684 23551",
+            "Created At": "2023-05-30T15:14:19.540Z",
+            "Updated At": "2023-05-30T15:14:19.540Z",
+            "tableId": "ta_bb_employee",
+            "type": "row",
+            "Employee Level": [
+                "Apprentice"
+            ],
+            "Start Date": "2021-03-10T12:00:00.000",
+            "EMPLOYEE ID": 4
+        },
+        {
+            "_id": "ro_ta_bb_employee_f7b6fda9a37f4fffaf9b489f29cd5bfd",
+            "_rev": "1-1950340f38bb8fd3a45fbec5cc9b596c",
+            "First Name": "Patrick",
+            "Last Name": "Garcia",
+            "Email": "patrick.garcia@example.com",
+            "Address": "7818 The Crescent",
+            "City": "Bath",
+            "Postcode": "OH5 3HE",
+            "Phone": "017683 02608",
+            "Created At": "2023-05-30T15:14:19.541Z",
+            "Updated At": "2023-05-30T15:14:19.541Z",
+            "tableId": "ta_bb_employee",
+            "type": "row",
+            "Employee Level": [
+                "Apprentice"
+            ],
+            "Start Date": "2014-08-30T12:00:00.000",
+            "EMPLOYEE ID": 9
+        },
+        {
+            "_id": "ro_ta_bb_expenses_08017bc2cc25442d860ba389e02aea60",
+            "_rev": "1-54dfa03c3139ddd3fcb4d5c8074cb8f2",
+            "Date Paid": "2022-11-24T12:00:00.000",
+            "Payment Due": "2022-11-24T12:00:00.000",
+            "Cost": 45,
+            "Notes": "Work van",
+            "Attachment": [],
+            "tableId": "ta_bb_expenses",
+            "Created At": "2023-05-30T15:14:19.544Z",
+            "Updated At": "2023-05-30T15:14:19.544Z",
+            "type": "row",
+            "Expense Tags": [
+                "Fuel",
+                "Equipment"
+            ],
+            "Expense ID": 4
+        },
+        {
+            "_id": "ro_ta_bb_expenses_089144bc48f14fbfa6596d839bace1a4",
+            "_rev": "1-bd39d526b657b184e5bf841ab4ed69ea",
+            "Cost": 2500,
+            "Notes": "New Laptop for the office. ",
+            "Attachment": [],
+            "tableId": "ta_bb_expenses",
+            "Created At": "2023-05-30T15:14:19.544Z",
+            "Updated At": "2023-05-30T15:14:19.544Z",
+            "type": "row",
+            "Date Paid": "2022-11-09T12:00:00.000",
+            "Expense Tags": [
+                "Equipment"
+            ],
+            "Expense ID": 8
+        },
+        {
+            "_id": "ro_ta_bb_expenses_17db7d0f73414a0b80ab80d25eaa25c9",
+            "_rev": "1-37b836636bb6556b13dbf458c3fc5ae2",
+            "Date Paid": "2022-11-25T12:00:00.000",
+            "Cost": 420.68,
+            "Notes": "Monthly games night",
+            "Attachment": [],
+            "tableId": "ta_bb_expenses",
+            "Created At": "2023-05-30T15:14:19.543Z",
+            "Updated At": "2023-05-30T15:14:19.543Z",
+            "type": "row",
+            "Expense Tags": [
+                "Food"
+            ],
+            "Expense ID": 3
+        },
+        {
+            "_id": "ro_ta_bb_expenses_24579271ba1c467789d8e8484236c48a",
+            "_rev": "1-de4d6b75473a2e93a6f8c33aa0fc1bf8",
+            "Payment Due": "2022-11-26T12:00:00.000",
+            "Cost": 28,
+            "Notes": "Circular saw needed a new plug",
+            "Attachment": [],
+            "tableId": "ta_bb_expenses",
+            "Created At": "2023-05-30T15:14:19.544Z",
+            "Updated At": "2023-05-30T15:14:19.544Z",
+            "type": "row",
+            "Expense Tags": [
+                "Equipment",
+                "Repair"
+            ],
+            "Expense ID": 6
+        },
+        {
+            "_id": "ro_ta_bb_expenses_50aba743027a48119a2b25bd69336ba4",
+            "_rev": "1-deb2f675b401cc3e683293526b1fec2e",
+            "Payment Due": "2022-11-19T12:00:00.000",
+            "Cost": 250,
+            "Notes": "200 new branded pens and 40 beanie hats. ",
+            "Attachment": [],
+            "tableId": "ta_bb_expenses",
+            "Created At": "2023-05-30T15:14:19.544Z",
+            "Updated At": "2023-05-30T15:14:19.544Z",
+            "type": "row",
+            "Expense Tags": [
+                "Service"
+            ],
+            "Expense ID": 10
+        },
+        {
+            "_id": "ro_ta_bb_expenses_680b0e5db36344f78f537ef9e227ff10",
+            "_rev": "1-b47272b10fc8eca2c180eac67e039822",
+            "Payment Due": "2022-11-11T12:00:00.000",
+            "Cost": 131.75,
+            "Notes": "Solicitor contract reviews for employees",
+            "Attachment": [],
+            "tableId": "ta_bb_expenses",
+            "Created At": "2023-05-30T15:14:19.544Z",
+            "Updated At": "2023-05-30T15:14:19.544Z",
+            "type": "row",
+            "Expense Tags": [
+                "Fees",
+                "Service"
+            ],
+            "Expense ID": 7
+        },
+        {
+            "_id": "ro_ta_bb_expenses_6ca2d130c0fa4023a3cae7af5b3e6299",
+            "_rev": "1-0cf439643dd6cb13dea5a82838dda2b9",
+            "Payment Due": "2022-11-25T12:00:00.000",
+            "Cost": 200,
+            "Notes": "Accountant payroll management",
+            "Attachment": [],
+            "tableId": "ta_bb_expenses",
+            "Created At": "2023-05-30T15:14:19.544Z",
+            "Updated At": "2023-05-30T15:14:19.544Z",
+            "type": "row",
+            "Expense Tags": [
+                "Fees",
+                "Service"
+            ],
+            "Expense ID": 5
+        },
+        {
+            "_id": "ro_ta_bb_expenses_9a557f3f26ef42c99720e1e2a0395ffd",
+            "_rev": "1-ee90bc875d7cccd1bd19557b8de6b02a",
+            "Date Paid": "2022-10-25T12:00:00.000",
+            "Cost": 275,
+            "Notes": "Accountant payroll. Added new hire",
+            "Attachment": [],
+            "tableId": "ta_bb_expenses",
+            "Created At": "2023-05-30T15:14:19.544Z",
+            "Updated At": "2023-05-30T15:14:19.544Z",
+            "type": "row",
+            "Expense Tags": [
+                "Fees",
+                "Service"
+            ],
+            "Expense ID": 9
+        },
+        {
+            "_id": "ro_ta_bb_expenses_b54f4bb904e24344adc043b19f9d2473",
+            "_rev": "1-e3bc41db1542f1b45637f3e6c15107ec",
+            "Date Paid": "2022-11-12T12:00:00.000",
+            "Payment Due": "2022-11-01T12:00:00.000",
+            "Cost": 117.4,
+            "Notes": "Two vans needed a top up",
+            "Attachment": [],
+            "tableId": "ta_bb_expenses",
+            "Created At": "2023-05-30T15:14:19.543Z",
+            "Updated At": "2023-05-30T15:14:19.543Z",
+            "type": "row",
+            "Expense Tags": [
+                "Fuel",
+                "Equipment"
+            ],
+            "Expense ID": 1
+        },
+        {
+            "_id": "ro_ta_bb_expenses_f65a50f62b2740f9b1ce64a54e4bb4e7",
+            "_rev": "3-75b850523ac8494a6f78ceca003c9cca",
+            "Date Paid": "2022-11-11T12:00:00.000",
+            "Cost": 217,
+            "Notes": "3 branded work bags and safety equipment for the new hires",
+            "Attachment": [],
+            "tableId": "ta_bb_expenses",
+            "Created At": "2023-05-30T15:14:19.543Z",
+            "Updated At": "2023-05-30T15:19:38.233Z",
+            "type": "row",
+            "Expense Tags": [
+                "Materials"
+            ],
+            "Expense ID": 2,
+            "createdAt": "2023-05-30T15:19:38.239Z",
+            "updatedAt": "2023-05-30T15:19:38.239Z",
+            "_revisions": {
+                "start": 3,
+                "ids": [
+                    "75b850523ac8494a6f78ceca003c9cca",
+                    "7bcda4e6bcf7ecfdd9a0762c979c7f00",
+                    "3b507fa86ef4e5ed4ef71815f5e70b0c"
+                ]
+            }
+        },
+        {
+            "_id": "ro_ta_bb_inventory_3dd0d05c7e2944b38de0d42fea9e5a47",
+            "_rev": "1-60771588f94a31571c10dfc003feb008",
+            "Status": [
+                "Available"
+            ],
+            "Item Name": "Masonry Drill",
+            "SKU": "ABC-123",
+            "Notes": "Making a burning smell",
+            "tableId": "ta_bb_inventory",
+            "Created At": "2023-05-30T15:14:19.539Z",
+            "Updated At": "2023-05-30T15:14:19.539Z",
+            "type": "row",
+            "Purchase Date": "1992-11-19T12:00:00.000",
+            "Item Tags": [
+                "Electrical",
+                "Tools"
+            ],
+            "Purchase Price": 250,
+            "Item ID": 2
+        },
+        {
+            "_id": "ro_ta_bb_inventory_6f8ec9cb04c44d39a0f60c2a182bd7d3",
+            "_rev": "1-bc97ec1728b9f89b7cc3f7e7cf62fb57",
+            "Status": [
+                "Repair"
+            ],
+            "Item Name": "Circular saw",
+            "SKU": "AB2-100",
+            "Notes": "",
+            "tableId": "ta_bb_inventory",
+            "Created At": "2023-05-30T15:14:19.539Z",
+            "Updated At": "2023-05-30T15:14:19.539Z",
+            "type": "row",
+            "Purchase Date": "2012-11-15T12:00:00.000",
+            "Item Tags": [
+                "Electrical"
+            ],
+            "Purchase Price": 300,
+            "Item ID": 3
+        },
+        {
+            "_id": "ro_ta_bb_inventory_7e68fce664dd4e48bbe36be3f97d07c0",
+            "_rev": "1-7d49c7d4b74abc3137baa3db7f3b0abc",
+            "Item Tags": [
+                "Electrical"
+            ],
+            "Purchase Price": 210,
+            "Purchase Date": "2022-10-17T12:00:00.000",
+            "Status": [
+                "Available"
+            ],
+            "Item Name": "Tablet Device (5g)",
+            "SKU": "PH-001",
+            "Notes": "Android tablet for use on site",
+            "tableId": "ta_bb_inventory",
+            "Created At": "2023-05-30T15:14:19.539Z",
+            "Updated At": "2023-05-30T15:14:19.539Z",
+            "type": "row",
+            "Item ID": 4
+        },
+        {
+            "_id": "ro_ta_bb_inventory_84761f71b30a4a4685e41b398356ef76",
+            "_rev": "1-7902310f642f93b4eb0545f534746cc8",
+            "Status": [
+                "Available"
+            ],
+            "Item Name": "Large Blue Van",
+            "SKU": "",
+            "Notes": "MAX LOAD LENGTH 4256 mm",
+            "tableId": "ta_bb_inventory",
+            "Created At": "2023-05-30T15:14:19.539Z",
+            "Updated At": "2023-05-30T15:14:19.539Z",
+            "type": "row",
+            "Purchase Date": "2022-10-10T12:00:00.000",
+            "Purchase Price": 65995,
+            "Item Tags": [
+                "Vehicle"
+            ],
+            "Item ID": 6
+        },
+        {
+            "_id": "ro_ta_bb_inventory_99d67a6d81e248c997f212e785d236aa",
+            "_rev": "1-213a828d0a6ab52486175371ab530127",
+            "Item Tags": [
+                "Tools",
+                "Electrical"
+            ],
+            "Purchase Price": 200,
+            "Purchase Date": "2022-10-12T12:00:00.000",
+            "Status": [
+                "Available"
+            ],
+            "Item Name": "Power Screwdriver",
+            "SKU": "TKIT-002-A",
+            "Notes": "",
+            "tableId": "ta_bb_inventory",
+            "Created At": "2023-05-30T15:14:19.539Z",
+            "Updated At": "2023-05-30T15:14:19.539Z",
+            "type": "row",
+            "Item ID": 5
+        },
+        {
+            "_id": "ro_ta_bb_inventory_a510308aa7654af9be2108f2a865b2dd",
+            "_rev": "1-9bc32e794b29f6b72088b6c94b522b45",
+            "Status": [
+                "Available"
+            ],
+            "Item Name": "Little Blue Van",
+            "SKU": "",
+            "Notes": "MAX PAYLOAD 595 kg \nMAX LOAD LENGTH 1620 mm",
+            "tableId": "ta_bb_inventory",
+            "Created At": "2023-05-30T15:14:19.538Z",
+            "Updated At": "2023-05-30T15:14:19.538Z",
+            "type": "row",
+            "Purchase Date": "2022-10-10T12:00:00.000",
+            "Purchase Price": 39995,
+            "Item Tags": [
+                "Vehicle"
+            ],
+            "Item ID": 1
+        },
+        {
+            "_id": "ro_ta_bb_inventory_b9d4afe8708b4b1095c3fea197bffcab",
+            "_rev": "1-d747a5ed38e12d99216ebc6de4956390",
+            "Purchase Price": 2500,
+            "Purchase Date": "2022-11-09T12:00:00.000",
+            "Status": [
+                "Available"
+            ],
+            "Item Name": "Office Laptop",
+            "SKU": "PC-123-ABC",
+            "Notes": "Office Laptop \n",
+            "tableId": "ta_bb_inventory",
+            "Created At": "2023-05-30T15:14:19.539Z",
+            "Updated At": "2023-05-30T15:14:19.539Z",
+            "type": "row",
+            "Item Tags": [
+                "Electrical",
+                "Office"
+            ],
+            "Item ID": 7
+        },
+        {
+            "_id": "ro_ta_bb_inventory_def998d04b3f4d32abf888ee536c0256",
+            "_rev": "1-d859781ea5a0d65d24defbeb20980df0",
+            "Status": [
+                "Available"
+            ],
+            "Item Name": "Little Red Van",
+            "SKU": "",
+            "Notes": "MAX PAYLOAD 595 kg \nMAX LOAD LENGTH 1620 mm",
+            "tableId": "ta_bb_inventory",
+            "Created At": "2023-05-30T15:14:19.539Z",
+            "Updated At": "2023-05-30T15:14:19.539Z",
+            "type": "row",
+            "Purchase Date": "2022-07-17T12:00:00.000",
+            "Purchase Price": 39995,
+            "Item Tags": [
+                "Vehicle"
+            ],
+            "Item ID": 8
+        },
+        {
+            "_id": "ro_ta_bb_jobs_05d24de5ae6a491cb70000ea9313e704",
+            "_rev": "1-e41e40df7a4ffb1e39a3662bd8e406bf",
+            "Customer Email": "freddie.franklin@example.com",
+            "Customer Phone": "016977 48298",
+            "Notes": "Equipment updates and some general maintenance.\n\nHouse has 3 walls.",
+            "Customer Name": "Freddie Franklin",
+            "Address": "2035 Brick Kiln Road\nCoventry\nTS81 7AW",
+            "Quote Price": 302,
+            "Quote Date": "2022-11-10T12:00:00.000",
+            "tableId": "ta_bb_jobs",
+            "Created At": "2023-05-30T15:14:19.543Z",
+            "Updated At": "2023-05-30T15:14:19.543Z",
+            "type": "row",
+            "Job ID": 8
+        },
+        {
+            "_id": "ro_ta_bb_jobs_0cb22ea9993b4a75843af4305c037591",
+            "_rev": "1-aab2076454d2da27a2e7c58b37f75ae5",
+            "Customer Email": "lester.rose@example.com",
+            "Customer Phone": "07103 009138",
+            "Notes": "4 Radiators Removed\nMany cats in the house",
+            "Customer Name": "Lester Rose",
+            "Address": "8543 Albert Road\nNewport\nLancashire\nUnited Kingdom\nS58 5YW",
+            "Quote Price": 3543,
+            "Quote Date": "2022-11-10T12:00:00.000",
+            "tableId": "ta_bb_jobs",
+            "Created At": "2023-05-30T15:14:19.542Z",
+            "Updated At": "2023-05-30T15:14:19.542Z",
+            "type": "row",
+            "Job ID": 6
+        },
+        {
+            "_id": "ro_ta_bb_jobs_1f621a0eb9dd4c9a9601f77f169ae4ea",
+            "_rev": "1-7bde2fce8f6ad3656ca2e5a8f7ae7f16",
+            "Works End": "2022-09-23T12:00:00.000",
+            "Customer Email": "warren.alvarez@example.com",
+            "Customer Phone": "07768 90794",
+            "Notes": "System restoration and upgrades. \nCustomer is a smoker, bring cleaning equipment",
+            "Customer Name": "Warren Alvarez",
+            "Address": "867 High Street\nBath\nKF8 6ZS",
+            "Works Start": "2022-09-23T12:00:00.000",
+            "Quote Price": 1412,
+            "Quote Date": "2022-09-20T12:00:00.000",
+            "tableId": "ta_bb_jobs",
+            "Created At": "2023-05-30T15:14:19.543Z",
+            "Updated At": "2023-05-30T15:14:19.543Z",
+            "type": "row",
+            "Job ID": 10
+        },
+        {
+            "_id": "ro_ta_bb_jobs_4b79c07ddb35410396c51ad09b44d249",
+            "_rev": "1-a3eb083c419f8663d25d57a96588862a",
+            "Works End": "2022-11-12T12:00:00.000",
+            "Customer Email": "diane.henry@example.com",
+            "Customer Phone": "07635 514491",
+            "Notes": "Large van required, recycling requested. \nNew customer",
+            "Customer Name": "Diane Henry",
+            "Address": "3518 Station Road\nSunderland\nCounty Down\nUnited Kingdom\nXC67 8ES",
+            "Works Start": "2022-11-11T12:00:00.000",
+            "Quote Price": 2039,
+            "Quote Date": "2022-11-10T12:00:00.000",
+            "tableId": "ta_bb_jobs",
+            "Created At": "2023-05-30T15:14:19.543Z",
+            "Updated At": "2023-05-30T15:14:19.543Z",
+            "type": "row",
+            "Job ID": 9
+        },
+        {
+            "_id": "ro_ta_bb_jobs_650a12125c224657ac898e40ae0c26af",
+            "_rev": "1-1ba155baa5c577e620f1fb0b310c2143",
+            "Updated Price": 307,
+            "Works End": "2022-11-19T12:00:00.000",
+            "Customer Email": "micheal.murphy@example.co",
+            "Customer Phone": "07344 867816",
+            "Notes": "Adding new utils and tearing down the dividing walls. Bring large blue van.\n\nThe customer can be difficult. Avoid",
+            "Customer Name": "Micheal Murphy",
+            "Address": "5266 York Road\nOxford\nG2 8EP",
+            "Works Start": "2022-11-10T12:00:00.000",
+            "Quote Price": 1231,
+            "Quote Date": "2022-10-04T12:00:00.000",
+            "tableId": "ta_bb_jobs",
+            "Created At": "2023-05-30T15:14:19.541Z",
+            "Updated At": "2023-05-30T15:14:19.541Z",
+            "type": "row",
+            "Job ID": 2
+        },
+        {
+            "_id": "ro_ta_bb_jobs_cc90a95cad8e45778621edcc5736fd93",
+            "_rev": "1-fb7c10531f974b3e93181ebc8e4d01b1",
+            "Works End": "2023-01-28T12:00:00.000",
+            "Customer Email": "susie.peterson@example.com",
+            "Customer Phone": "016973 88386",
+            "Notes": "Bring the large van as recycling has been requested. \nAlso, they have a large dog.",
+            "Customer Name": "Susie Peterson",
+            "Address": "5452 The Crescent\nBrighton and Hove\nAI7G 7BN",
+            "Works Start": "2023-01-26T12:00:00.000",
+            "Quote Price": 4200,
+            "Quote Date": "2022-11-11T12:00:00.000",
+            "tableId": "ta_bb_jobs",
+            "Created At": "2023-05-30T15:14:19.541Z",
+            "Updated At": "2023-05-30T15:14:19.541Z",
+            "type": "row",
+            "Job ID": 1
+        },
+        {
+            "_id": "ro_ta_bb_jobs_cde7b8836cfc4cf3b8993d9c762e8948",
+            "_rev": "1-e74edb8def996992d0c8dd9c47f539ba",
+            "Customer Email": "",
+            "Customer Phone": "07374 594595",
+            "Notes": "Removal and recycle requested of all units.\n\nStill awaiting feedback. If this is still around after next wednesday, just delete it.",
+            "Customer Name": "Charlotte Carpenter",
+            "Address": "7780 Mill Lane\nGreater Manchester\nDU57 3GA",
+            "Quote Price": 500,
+            "Quote Date": "2022-11-08T12:00:00.000",
+            "tableId": "ta_bb_jobs",
+            "Created At": "2023-05-30T15:14:19.541Z",
+            "Updated At": "2023-05-30T15:14:19.541Z",
+            "type": "row",
+            "Job ID": 3
+        },
+        {
+            "_id": "ro_ta_bb_jobs_e7b1e59ddec84107bb2bb61d57803370",
+            "_rev": "1-3f9ff2517ba3240ff6e0a2f9621f6dd0",
+            "Works End": "2022-11-13T12:00:00.000",
+            "Customer Email": "scarlett.gibson@example.co",
+            "Customer Phone": "07572 745859",
+            "Notes": "This address has a service dog.\n\nQuote didn't account for a sinkhole at the property. Amended",
+            "Customer Name": "Scarlett Gibson",
+            "Address": "5624 The Drive\nArmagh\nNU0 5DW",
+            "Works Start": "2022-11-12T12:00:00.000",
+            "Quote Price": 120,
+            "Quote Date": "2022-11-11T12:00:00.000",
+            "tableId": "ta_bb_jobs",
+            "Created At": "2023-05-30T15:14:19.542Z",
+            "Updated At": "2023-05-30T15:14:19.542Z",
+            "type": "row",
+            "Updated Price": 175,
+            "Job ID": 5
+        },
+        {
+            "_id": "ro_ta_bb_jobs_eca9bd5218f846b1b94fca6a905e6f0a",
+            "_rev": "1-6a666461004fdecce281f56657e8141c",
+            "Updated Price": 2001,
+            "Works End": "2022-11-16T12:00:00.000",
+            "Customer Email": "leah.freeman@example.com",
+            "Customer Phone": "07844 42134",
+            "Notes": "Original quote too high. Material costs dropped.\nFull system installation.",
+            "Customer Name": "Leah Freeman",
+            "Address": "4252 Fairview Road\nChester\nW62 7JH",
+            "Works Start": "2022-11-09T12:00:00.000",
+            "Quote Price": 3000,
+            "Quote Date": "2022-10-04T12:00:00.000",
+            "tableId": "ta_bb_jobs",
+            "Created At": "2023-05-30T15:14:19.541Z",
+            "Updated At": "2023-05-30T15:14:19.541Z",
+            "type": "row",
+            "Job ID": 4
+        },
+        {
+            "_id": "ro_ta_bb_jobs_f6f97bc3463e47679f53e0a4b8381c90",
+            "_rev": "1-f6bd3a2b6d5d9d5973221801cb978493",
+            "Works End": "2022-11-24T12:00:00.000",
+            "Customer Email": "joel.owens@example.com",
+            "Customer Phone": "07216 548317",
+            "Notes": "Full retrofit of current installation. Will need big blue van. \n\nThere's a decent coffee place nearby. Ensure you buy enough for everyone.",
+            "Customer Name": "Joel Owens",
+            "Address": "5516 Oaks Cross\nNewry\nT6V 9SL",
+            "Works Start": "2022-11-24T12:00:00.000",
+            "Quote Price": 789,
+            "Quote Date": "2022-11-10T12:00:00.000",
+            "tableId": "ta_bb_jobs",
+            "Created At": "2023-05-30T15:14:19.542Z",
+            "Updated At": "2023-05-30T15:14:19.542Z",
+            "type": "row",
+            "Job ID": 7
+        },
+        {
+            "_id": "role_ADMIN",
+            "_rev": "2-f90bf6176d1e23f9bd626cdd5dbf9b98",
+            "permissions": {
+                "datasource_plus_92abbf33b17c4538b02217b8c753fceb__employee_class": [
+                    "write",
+                    "read"
+                ]
+            },
+            "name": "Admin",
+            "permissionId": "admin",
+            "inherits": "POWER",
+            "_revisions": {
+                "start": 2,
+                "ids": [
+                    "f90bf6176d1e23f9bd626cdd5dbf9b98",
+                    "f3f34b7844cf3084bfc9c7056eeda654"
+                ]
+            }
+        },
+        {
+            "_id": "screen_1781e17ea8ff427d9ae774fd8628148a",
+            "_rev": "5-6ca125538676a5b0874118ae1f98b5d4",
+            "showNavigation": true,
+            "width": "Large",
+            "props": {
+                "_id": "c28097293776144f894fc52fe2d5975ab",
+                "_component": "@budibase/standard-components/container",
+                "_styles": {
+                    "normal": {},
+                    "hover": {},
+                    "active": {},
+                    "selected": {}
+                },
+                "_children": [
+                    {
+                        "_id": "c7370acbf436849b6b59a4fc0c1565db0",
+                        "_component": "@budibase/standard-components/tableblock",
+                        "_styles": {
+                            "normal": {},
+                            "hover": {},
+                            "active": {},
+                            "selected": {}
+                        },
+                        "_instanceName": "time_efforts - Table block",
+                        "_children": [],
+                        "title": "Invested Time",
+                        "dataSource": {
+                            "label": "time_efforts",
+                            "name": "datasource_plus_92abbf33b17c4538b02217b8c753fceb__time_efforts",
+                            "tableId": "datasource_plus_92abbf33b17c4538b02217b8c753fceb__time_efforts",
+                            "type": "table"
+                        },
+                        "sortOrder": "Descending",
+                        "size": "spectrum--medium",
+                        "paginate": true,
+                        "rowCount": 8,
+                        "clickBehaviour": "details",
+                        "showTitleButton": true,
+                        "titleButtonText": "Create row",
+                        "titleButtonClickBehaviour": "new",
+                        "sortColumn": "datetime",
+                        "tableColumns": [
+                            {
+                                "name": "employees",
+                                "displayName": "Employee",
+                                "id": "dNkOp7Syf-"
+                            },
+                            {
+                                "name": "projects",
+                                "displayName": "Project",
+                                "id": "fqzDISl099"
+                            },
+                            {
+                                "name": "time_spent_min",
+                                "displayName": "Time spent (min)",
+                                "id": "vdUaMS-ts6"
+                            },
+                            {
+                                "name": "datetime",
+                                "displayName": "Timestamp",
+                                "id": "YtQE1ZAGUp"
+                            }
+                        ]
+                    }
+                ],
+                "_instanceName": "time_efforts - List",
+                "direction": "column",
+                "hAlign": "stretch",
+                "vAlign": "top",
+                "size": "grow",
+                "gap": "M"
+            },
+            "routing": {
+                "route": "/time_efforts",
+                "roleId": "BASIC",
+                "homeScreen": false
+            },
+            "name": "c28097293776144f894fc52fe2d5975ab",
+            "template": "ROW_LIST_TEMPLATE",
+            "datasource": "PostgreSQL",
+            "autoTableId": "datasource_plus_92abbf33b17c4538b02217b8c753fceb__time_efforts",
+            "createdAt": "2023-05-31T10:29:34.839Z",
+            "updatedAt": "2023-05-31T10:35:15.214Z",
+            "pluginAdded": false,
+            "_revisions": {
+                "start": 5,
+                "ids": [
+                    "6ca125538676a5b0874118ae1f98b5d4",
+                    "4096f1801b0f512c22951560e5634629",
+                    "b8e4a03f01e47e95badb3542f30c5760",
+                    "6f0d079fabca68348b93820f7a954061",
+                    "c8876161e2d824fd87fd8c2fd9ca86f5"
+                ]
+            }
+        },
+        {
+            "_id": "screen_2406f72a45d54316864bd69cc0cceee0",
+            "_rev": "5-f25e58dacda9b04e8e4cd5e6cdf32531",
+            "showNavigation": true,
+            "width": "Large",
+            "props": {
+                "_id": "cf68fa66a3de34db4ba9e1671204b98b7",
+                "_component": "@budibase/standard-components/container",
+                "_styles": {
+                    "normal": {},
+                    "hover": {},
+                    "active": {},
+                    "selected": {}
+                },
+                "_children": [
+                    {
+                        "_id": "c4ac002dfcc15494198b1276ae584a749",
+                        "_component": "@budibase/standard-components/tableblock",
+                        "_styles": {
+                            "normal": {},
+                            "hover": {},
+                            "active": {},
+                            "selected": {}
+                        },
+                        "_instanceName": "invest_efforts - Table block",
+                        "_children": [],
+                        "title": "Time invests",
+                        "dataSource": {
+                            "label": "invest_efforts",
+                            "name": "datasource_plus_92abbf33b17c4538b02217b8c753fceb__invest_efforts",
+                            "tableId": "datasource_plus_92abbf33b17c4538b02217b8c753fceb__invest_efforts",
+                            "type": "table"
+                        },
+                        "sortOrder": "Descending",
+                        "size": "spectrum--medium",
+                        "paginate": true,
+                        "rowCount": 8,
+                        "clickBehaviour": "details",
+                        "showTitleButton": true,
+                        "titleButtonText": "Create row",
+                        "titleButtonClickBehaviour": "new",
+                        "tableColumns": [
+                            {
+                                "name": "projects",
+                                "displayName": "Project",
+                                "id": "1uWpYXlSxC"
+                            },
+                            {
+                                "name": "invest_cent",
+                                "displayName": "Capital Invest",
+                                "id": "io5L6XEr3m"
+                            },
+                            {
+                                "name": "datetime",
+                                "displayName": "Timestamp",
+                                "id": "4qjjrY9Lw"
+                            }
+                        ],
+                        "sortColumn": "datetime"
+                    }
+                ],
+                "_instanceName": "invest_efforts - List",
+                "direction": "column",
+                "hAlign": "stretch",
+                "vAlign": "top",
+                "size": "grow",
+                "gap": "M"
+            },
+            "routing": {
+                "route": "/invest_efforts",
+                "roleId": "BASIC",
+                "homeScreen": false
+            },
+            "name": "cf68fa66a3de34db4ba9e1671204b98b7",
+            "template": "ROW_LIST_TEMPLATE",
+            "datasource": "PostgreSQL",
+            "autoTableId": "datasource_plus_92abbf33b17c4538b02217b8c753fceb__invest_efforts",
+            "createdAt": "2023-05-31T10:29:34.587Z",
+            "updatedAt": "2023-05-31T10:32:46.126Z",
+            "pluginAdded": false,
+            "_revisions": {
+                "start": 5,
+                "ids": [
+                    "f25e58dacda9b04e8e4cd5e6cdf32531",
+                    "0b53e1f702106f21f8b00e913a3710f1",
+                    "25fdc32c88e8712dc65bab2680f008cb",
+                    "7d8c28171d547ac12834f6603d43dd51",
+                    "5ee59cd3955611a5117439f32baf23e9"
+                ]
+            }
+        },
+        {
+            "_id": "screen_59617ccdb0f44cc8ba12b328d4f8cac7",
+            "_rev": "40-0921adaa702b06747438964918f2c78f",
+            "showNavigation": true,
+            "width": "Large",
+            "props": {
+                "_id": "c13555d2906334372b74571d00e2b99f9",
+                "_component": "@budibase/standard-components/container",
+                "_styles": {
+                    "normal": {},
+                    "hover": {},
+                    "active": {},
+                    "selected": {}
+                },
+                "_children": [
+                    {
+                        "_id": "c7688e05ea38e4b6daad41622533df0b3",
+                        "_component": "@budibase/standard-components/dataprovider",
+                        "_styles": {
+                            "normal": {},
+                            "hover": {},
+                            "active": {}
+                        },
+                        "_instanceName": "New Data Provider 2",
+                        "dataSource": {
+                            "label": "Project Overview_SQL",
+                            "name": "Project Overview_SQL",
+                            "datasourceId": "datasource_plus_92abbf33b17c4538b02217b8c753fceb",
+                            "parameters": [],
+                            "fields": {
+                                "sql": "select\n\tp.id,\n\tp.project_name,\n\tp.sales_price_cent / 100 as sales_price_eur,\n\tsum(ie.invest_cent)/ 100 as invest_eur,\n\tsum((te.time_spent_min / 60)*(ec.hourly_rate_cent / 100)) as time_invest_eur,\n\tsum(te.time_spent_min / 60) as time_invest_hours\nfrom\n\tprojects p\nleft join invest_efforts ie on\n\tp.id = ie.project_id\nleft join time_efforts te on \n\tp.id = te.project_id\nleft join employees e on\n\tte.employee_id = e.id\nleft join employee_class ec on\n\te.employee_class = ec.id\ngroup by\n\tp.id;"
+                            },
+                            "queryVerb": "read",
+                            "transformer": "return data",
+                            "schema": {
+                                "id": {
+                                    "name": "id",
+                                    "type": "number"
+                                },
+                                "project_name": {
+                                    "name": "project_name",
+                                    "type": "string"
+                                },
+                                "sales_price_eur": {
+                                    "name": "sales_price_eur",
+                                    "type": "number"
+                                },
+                                "invest_eur": {
+                                    "name": "invest_eur",
+                                    "type": "number"
+                                },
+                                "time_invest_eur": {
+                                    "name": "time_invest_eur",
+                                    "type": "number"
+                                },
+                                "time_invest_hours": {
+                                    "name": "time_invest_hours",
+                                    "type": "number"
+                                }
+                            },
+                            "_id": "query_datasource_plus_92abbf33b17c4538b02217b8c753fceb_946e6ace31ed44e4b22e415bac83e2ad",
+                            "createdAt": "2023-05-31T09:49:31.502Z",
+                            "updatedAt": "2023-05-31T09:49:31.502Z",
+                            "_rev": "1-c195246741998a25e12bbe4cd5502b6c",
+                            "type": "query"
+                        },
+                        "sortOrder": "Ascending",
+                        "limit": 50,
+                        "paginate": true,
+                        "_children": [
+                            {
+                                "_id": "c259ab4a96fcf46c6aef5bcf4ccf232a2",
+                                "_component": "@budibase/standard-components/table",
+                                "_styles": {
+                                    "normal": {},
+                                    "hover": {},
+                                    "active": {}
+                                },
+                                "_instanceName": "Project overview",
+                                "size": "spectrum--medium",
+                                "rowCount": 8,
+                                "allowSelectRows": false,
+                                "noRowsMessage": "No rows found",
+                                "_children": [],
+                                "dataProvider": "{{ literal [c7688e05ea38e4b6daad41622533df0b3] }}",
+                                "columns": [
+                                    {
+                                        "name": "id",
+                                        "displayName": "id",
+                                        "id": "IBVqjkD01"
+                                    },
+                                    {
+                                        "id": "72U35aYnn",
+                                        "name": "project_name",
+                                        "displayName": "Project Name"
+                                    },
+                                    {
+                                        "name": "sales_price_eur",
+                                        "displayName": "Sales Price (€)",
+                                        "id": "Xd1acXuk4s"
+                                    },
+                                    {
+                                        "name": "invest_eur",
+                                        "displayName": "Current capital invest (€)",
+                                        "id": "zKWmHYMMf4"
+                                    },
+                                    {
+                                        "name": "time_invest_eur",
+                                        "displayName": "Current time invest (€)",
+                                        "id": "MkYWKrgaIM"
+                                    },
+                                    {
+                                        "name": "time_invest_hours",
+                                        "displayName": "Current time invest (h)",
+                                        "id": "Kzh_ePExvU"
+                                    }
+                                ],
+                                "quiet": false,
+                                "compact": false
+                            }
+                        ],
+                        "filter": [
+                            {
+                                "operator": "allOr"
+                            }
+                        ],
+                        "sortColumn": "id"
+                    }
+                ],
+                "_instanceName": "New Screen",
+                "direction": "column",
+                "hAlign": "stretch",
+                "vAlign": "top",
+                "size": "grow",
+                "gap": "M"
+            },
+            "routing": {
+                "route": "/home",
+                "roleId": "BASIC",
+                "homeScreen": false,
+                "roldId": "BASIC"
+            },
+            "name": "screen-id",
+            "createdAt": "2023-05-30T15:14:20.166Z",
+            "updatedAt": "2023-05-31T10:26:05.586Z",
+            "pluginAdded": false,
+            "_revisions": {
+                "start": 40,
+                "ids": [
+                    "0921adaa702b06747438964918f2c78f",
+                    "0e2e2b0b77539841725d8cd5044071e9",
+                    "df3648bc001f27600d01f6bc8e89717c",
+                    "c680c78b9740e7a81c43a20bc3868c12",
+                    "3f60e709c8d03ec9cd1fee2d0367bfa9",
+                    "2a46029be379a70820c4e5d970768254",
+                    "4964a987d077f55a3149afb5dcf0f6e9",
+                    "27a882d07ec2d7ab8f2cfee012cb2b18",
+                    "0a13aa96dd31e49b7d0af4397434b305",
+                    "f99ff4e035de16b9c66602bb142570b8",
+                    "324ea1cce8f9cb8412c213e15cdf9c96",
+                    "77487263845d00c43e07ba228f3e1238",
+                    "5a262d8370384cca9f9fb615b24261a6",
+                    "24051f3ba6686451e65654f345be3b5e",
+                    "c2fd697405b4ec8ec065887e7a056c85",
+                    "ee463fb90c06715c3168a425ecd23341",
+                    "b1ec59b50b914333be667e19fd39bd46",
+                    "eeff1f9a6868701fc5b550e0c132b354",
+                    "c58c8d16609384119450fb4aaeccf335",
+                    "fefd9ec5d69b5c9ea228114cb255e504",
+                    "7beb5d914ad1de8bf1cd24677b0926e5",
+                    "8e724a96026bdbc3bd80a8eb9cb9e970",
+                    "566e1742da78b739b587c517d8e154b6",
+                    "ddc3781a5e3e53cd6186c87bfe055b4e",
+                    "ace7f448822f709d7f471faf4b0e2b3c",
+                    "cd27ef2bdc6da2833209a759cef5a233",
+                    "5e1d3af78193123d164f4debe1e38698",
+                    "2e4d9e55f32761b9bdfa9b569a93ff73",
+                    "e74d314a4460347b240a4e78fc1008c3",
+                    "fe74f82dfd54142c9db1268b46747030",
+                    "86730e320bd3114149080f8e3fe37023",
+                    "f5be209177d84dd130f104b62aa38d6c",
+                    "faf6d21feadfbaf62b3f0d9e2018e1ea",
+                    "92f21f0c3d71c808197b570e0de2d759",
+                    "5228cc12437e35054cb433aebee68127",
+                    "5a732560fcf87844c8f33e7576b24ede",
+                    "b7aa726662b02c24c26a57bb3cda1b78",
+                    "20dadd0b902134341feb4460608f5533",
+                    "3dd5db3e8790a180e80235352be2c989",
+                    "2fdb0fc261577e92c9ab28f1471b15f7"
+                ]
+            }
+        },
+        {
+            "_id": "screen_81bf00cbcccc488fb82690d1c49e9010",
+            "_rev": "5-3deff737e63a20ca9239afe79247a6c1",
+            "showNavigation": true,
+            "width": "Large",
+            "props": {
+                "_id": "c69e72f4dacfc450b860fd3c7214e8773",
+                "_component": "@budibase/standard-components/container",
+                "_styles": {
+                    "normal": {},
+                    "hover": {},
+                    "active": {},
+                    "selected": {}
+                },
+                "_children": [
+                    {
+                        "_id": "cd290bafb7d5e44a3980c337b9b2f5a58",
+                        "_component": "@budibase/standard-components/tableblock",
+                        "_styles": {
+                            "normal": {},
+                            "hover": {},
+                            "active": {},
+                            "selected": {}
+                        },
+                        "_instanceName": "projects - Table block",
+                        "_children": [],
+                        "title": "Projects",
+                        "dataSource": {
+                            "label": "projects",
+                            "name": "datasource_plus_92abbf33b17c4538b02217b8c753fceb__projects",
+                            "tableId": "datasource_plus_92abbf33b17c4538b02217b8c753fceb__projects",
+                            "type": "table"
+                        },
+                        "sortOrder": "Descending",
+                        "size": "spectrum--medium",
+                        "paginate": true,
+                        "rowCount": 8,
+                        "clickBehaviour": "details",
+                        "showTitleButton": true,
+                        "titleButtonText": "Create row",
+                        "titleButtonClickBehaviour": "new",
+                        "sortColumn": "id",
+                        "tableColumns": [
+                            {
+                                "name": "project_name",
+                                "displayName": "project_name",
+                                "id": "f-Bp7L96zx"
+                            },
+                            {
+                                "name": "sales_price_cent",
+                                "displayName": "sales_price_cent",
+                                "id": "pNcg_-Y1iK"
+                            },
+                            {
+                                "name": "project_start",
+                                "displayName": "project_start",
+                                "id": "9lcIfuTbJo"
+                            },
+                            {
+                                "name": "project_end",
+                                "displayName": "project_end",
+                                "id": "xNCz8DRWzo"
+                            },
+                            {
+                                "name": "closed",
+                                "displayName": "closed",
+                                "id": "O4J1WQA5Q6"
+                            }
+                        ]
+                    }
+                ],
+                "_instanceName": "projects - List",
+                "direction": "column",
+                "hAlign": "stretch",
+                "vAlign": "top",
+                "size": "grow",
+                "gap": "M"
+            },
+            "routing": {
+                "route": "/projects",
+                "roleId": "BASIC",
+                "homeScreen": false
+            },
+            "name": "c69e72f4dacfc450b860fd3c7214e8773",
+            "template": "ROW_LIST_TEMPLATE",
+            "datasource": "PostgreSQL",
+            "autoTableId": "datasource_plus_92abbf33b17c4538b02217b8c753fceb__projects",
+            "createdAt": "2023-05-31T10:35:39.381Z",
+            "updatedAt": "2023-05-31T10:36:46.940Z",
+            "pluginAdded": false,
+            "_revisions": {
+                "start": 5,
+                "ids": [
+                    "3deff737e63a20ca9239afe79247a6c1",
+                    "4a1d55d3ddff65d1a9f55ce5f4ca4787",
+                    "d4f66f05b3fb4b4db397122d03c7da73",
+                    "73b053ba6a44f543c1fa81d4be23fa82",
+                    "cf24ce9209e4176d59372ae0b8a40109"
+                ]
+            }
+        },
+        {
+            "_id": "screen_9241c9a077f84e47be7346c2c632701f",
+            "_rev": "1-1c9f8c7dfe83d95a279f51e0fbb1248e",
+            "showNavigation": true,
+            "width": "Large",
+            "props": {
+                "_id": "c52d67e0cc6104209bde05ab1b3783685",
+                "_component": "@budibase/standard-components/container",
+                "_styles": {
+                    "normal": {},
+                    "hover": {},
+                    "active": {},
+                    "selected": {}
+                },
+                "_children": [
+                    {
+                        "_id": "cee5f894e5cc248359ae2cf7de07c83b4",
+                        "_component": "@budibase/standard-components/tableblock",
+                        "_styles": {
+                            "normal": {},
+                            "hover": {},
+                            "active": {},
+                            "selected": {}
+                        },
+                        "_instanceName": "Expenses - Table block",
+                        "_children": [],
+                        "title": "Expenses",
+                        "dataSource": {
+                            "label": "Expenses",
+                            "name": "ta_bb_expenses",
+                            "tableId": "ta_bb_expenses",
+                            "type": "table"
+                        },
+                        "sortOrder": "Ascending",
+                        "size": "spectrum--medium",
+                        "paginate": true,
+                        "rowCount": 8,
+                        "clickBehaviour": "details",
+                        "showTitleButton": true,
+                        "titleButtonText": "Create row",
+                        "titleButtonClickBehaviour": "new"
+                    }
+                ],
+                "_instanceName": "Expenses - List",
+                "direction": "column",
+                "hAlign": "stretch",
+                "vAlign": "top",
+                "size": "grow",
+                "gap": "M"
+            },
+            "routing": {
+                "route": "/expenses",
+                "roleId": "BASIC",
+                "homeScreen": false
+            },
+            "name": "c52d67e0cc6104209bde05ab1b3783685",
+            "template": "ROW_LIST_TEMPLATE",
+            "datasource": "Sample Data",
+            "autoTableId": "ta_bb_expenses",
+            "createdAt": "2023-05-30T15:17:41.442Z",
+            "updatedAt": "2023-05-30T15:17:41.442Z"
+        },
+        {
+            "_id": "ta_bb_employee",
+            "_rev": "1-754eeefbcca0fb6b983eb04b1dcd1643",
+            "type": "internal",
+            "views": {},
+            "name": "Employees",
+            "sourceId": "datasource_internal_bb_default",
+            "primaryDisplay": "First Name",
+            "schema": {
+                "First Name": {
+                    "name": "First Name",
+                    "type": "string",
+                    "constraints": {
+                        "type": "string",
+                        "length": {},
+                        "presence": false
+                    }
+                },
+                "Last Name": {
+                    "name": "Last Name",
+                    "type": "string",
+                    "constraints": {
+                        "type": "string",
+                        "length": {},
+                        "presence": false
+                    }
+                },
+                "Email": {
+                    "name": "Email",
+                    "type": "string",
+                    "constraints": {
+                        "type": "string",
+                        "length": {},
+                        "presence": false
+                    }
+                },
+                "Address": {
+                    "name": "Address",
+                    "type": "string",
+                    "constraints": {
+                        "type": "string",
+                        "length": {},
+                        "presence": false
+                    }
+                },
+                "City": {
+                    "name": "City",
+                    "type": "string",
+                    "constraints": {
+                        "type": "string",
+                        "length": {},
+                        "presence": false
+                    }
+                },
+                "Postcode": {
+                    "name": "Postcode",
+                    "type": "string",
+                    "constraints": {
+                        "type": "string",
+                        "length": {},
+                        "presence": false
+                    }
+                },
+                "Phone": {
+                    "name": "Phone",
+                    "type": "string",
+                    "constraints": {
+                        "type": "string",
+                        "length": {},
+                        "presence": false
+                    }
+                },
+                "EMPLOYEE ID": {
+                    "name": "EMPLOYEE ID",
+                    "type": "number",
+                    "subtype": "autoID",
+                    "icon": "ri-magic-line",
+                    "autocolumn": true,
+                    "constraints": {
+                        "type": "number",
+                        "presence": false,
+                        "numericality": {
+                            "greaterThanOrEqualTo": "",
+                            "lessThanOrEqualTo": ""
+                        }
+                    },
+                    "lastID": 10
+                },
+                "Employee Level": {
+                    "type": "array",
+                    "constraints": {
+                        "type": "array",
+                        "presence": false,
+                        "inclusion": [
+                            "Apprentice",
+                            "Contractor",
+                            "Junior",
+                            "Manager",
+                            "Senior"
+                        ]
+                    },
+                    "name": "Employee Level",
+                    "sortable": false
+                },
+                "Badge Photo": {
+                    "type": "attachment",
+                    "constraints": {
+                        "type": "array",
+                        "presence": false
+                    },
+                    "name": "Badge Photo",
+                    "sortable": false
+                },
+                "Jobs": {
+                    "type": "link",
+                    "constraints": {
+                        "type": "array",
+                        "presence": false
+                    },
+                    "fieldName": "Assigned",
+                    "name": "Jobs",
+                    "relationshipType": "many-to-many",
+                    "tableId": "ta_bb_jobs"
+                },
+                "Start Date": {
+                    "type": "datetime",
+                    "constraints": {
+                        "type": "string",
+                        "length": {},
+                        "presence": false,
+                        "datetime": {
+                            "latest": "",
+                            "earliest": ""
+                        }
+                    },
+                    "name": "Start Date",
+                    "ignoreTimezones": true
+                },
+                "End Date": {
+                    "type": "datetime",
+                    "constraints": {
+                        "type": "string",
+                        "length": {},
+                        "presence": false,
+                        "datetime": {
+                            "latest": "",
+                            "earliest": ""
+                        }
+                    },
+                    "name": "End Date",
+                    "ignoreTimezones": true
+                },
+                "Created At": {
+                    "name": "Created At",
+                    "type": "datetime",
+                    "subtype": "createdAt",
+                    "icon": "ri-magic-line",
+                    "autocolumn": true,
+                    "constraints": {
+                        "type": "string",
+                        "length": {},
+                        "presence": false,
+                        "datetime": {
+                            "latest": "",
+                            "earliest": ""
+                        }
+                    }
+                },
+                "Updated At": {
+                    "name": "Updated At",
+                    "type": "datetime",
+                    "subtype": "updatedAt",
+                    "icon": "ri-magic-line",
+                    "autocolumn": true,
+                    "constraints": {
+                        "type": "string",
+                        "length": {},
+                        "presence": false,
+                        "datetime": {
+                            "latest": "",
+                            "earliest": ""
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "_id": "ta_bb_expenses",
+            "_rev": "1-92ac33688583e210368cb1acdf5731ef",
+            "type": "internal",
+            "views": {},
+            "name": "Expenses",
+            "sourceId": "datasource_internal_bb_default",
+            "primaryDisplay": "Expense ID",
+            "schema": {
+                "Expense ID": {
+                    "name": "Expense ID",
+                    "type": "number",
+                    "subtype": "autoID",
+                    "icon": "ri-magic-line",
+                    "autocolumn": true,
+                    "constraints": {
+                        "type": "number",
+                        "presence": false,
+                        "numericality": {
+                            "greaterThanOrEqualTo": "",
+                            "lessThanOrEqualTo": ""
+                        }
+                    },
+                    "lastID": 10
+                },
+                "Expense Tags": {
+                    "type": "array",
+                    "constraints": {
+                        "type": "array",
+                        "presence": {
+                            "allowEmpty": false
+                        },
+                        "inclusion": [
+                            "Equipment",
+                            "Fees",
+                            "Food",
+                            "Fuel",
+                            "Materials",
+                            "Office",
+                            "Other",
+                            "Repair",
+                            "Service"
+                        ]
+                    },
+                    "name": "Expense Tags",
+                    "sortable": false
+                },
+                "Cost": {
+                    "type": "number",
+                    "constraints": {
+                        "type": "number",
+                        "presence": {
+                            "allowEmpty": false
+                        },
+                        "numericality": {
+                            "greaterThanOrEqualTo": "",
+                            "lessThanOrEqualTo": ""
+                        }
+                    },
+                    "name": "Cost"
+                },
+                "Notes": {
+                    "type": "longform",
+                    "constraints": {
+                        "type": "string",
+                        "length": {},
+                        "presence": false
+                    },
+                    "name": "Notes",
+                    "useRichText": null
+                },
+                "Payment Due": {
+                    "type": "datetime",
+                    "constraints": {
+                        "type": "string",
+                        "length": {},
+                        "presence": false,
+                        "datetime": {
+                            "latest": "",
+                            "earliest": ""
+                        }
+                    },
+                    "name": "Payment Due",
+                    "ignoreTimezones": true
+                },
+                "Date Paid": {
+                    "type": "datetime",
+                    "constraints": {
+                        "type": "string",
+                        "length": {},
+                        "presence": false,
+                        "datetime": {
+                            "latest": "",
+                            "earliest": ""
+                        }
+                    },
+                    "name": "Date Paid",
+                    "ignoreTimezones": true
+                },
+                "Attachment": {
+                    "type": "attachment",
+                    "constraints": {
+                        "type": "array",
+                        "presence": false
+                    },
+                    "name": "Attachment",
+                    "sortable": false
+                },
+                "Created At": {
+                    "name": "Created At",
+                    "type": "datetime",
+                    "subtype": "createdAt",
+                    "icon": "ri-magic-line",
+                    "autocolumn": true,
+                    "constraints": {
+                        "type": "string",
+                        "length": {},
+                        "presence": false,
+                        "datetime": {
+                            "latest": "",
+                            "earliest": ""
+                        }
+                    }
+                },
+                "Updated At": {
+                    "name": "Updated At",
+                    "type": "datetime",
+                    "subtype": "updatedAt",
+                    "icon": "ri-magic-line",
+                    "autocolumn": true,
+                    "constraints": {
+                        "type": "string",
+                        "length": {},
+                        "presence": false,
+                        "datetime": {
+                            "latest": "",
+                            "earliest": ""
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "_id": "ta_bb_inventory",
+            "_rev": "1-18f444b0111f032b65cc09f0a13753ff",
+            "type": "internal",
+            "views": {},
+            "sourceId": "datasource_internal_bb_default",
+            "primaryDisplay": "Item Name",
+            "name": "Inventory",
+            "schema": {
+                "Item ID": {
+                    "name": "Item ID",
+                    "type": "number",
+                    "subtype": "autoID",
+                    "icon": "ri-magic-line",
+                    "autocolumn": true,
+                    "constraints": {
+                        "type": "number",
+                        "presence": false,
+                        "numericality": {
+                            "greaterThanOrEqualTo": "",
+                            "lessThanOrEqualTo": ""
+                        }
+                    },
+                    "lastID": 8
+                },
+                "Item Name": {
+                    "type": "string",
+                    "constraints": {
+                        "type": "string",
+                        "length": {
+                            "maximum": null
+                        },
+                        "presence": {
+                            "allowEmpty": false
+                        }
+                    },
+                    "name": "Item Name"
+                },
+                "Item Tags": {
+                    "type": "array",
+                    "constraints": {
+                        "type": "array",
+                        "presence": {
+                            "allowEmpty": false
+                        },
+                        "inclusion": [
+                            "Electrical",
+                            "Material",
+                            "Office",
+                            "Tools",
+                            "Vehicle"
+                        ]
+                    },
+                    "name": "Item Tags",
+                    "sortable": false
+                },
+                "Notes": {
+                    "type": "longform",
+                    "constraints": {
+                        "type": "string",
+                        "length": {},
+                        "presence": false
+                    },
+                    "name": "Notes",
+                    "useRichText": null
+                },
+                "Status": {
+                    "type": "array",
+                    "constraints": {
+                        "type": "array",
+                        "presence": {
+                            "allowEmpty": false
+                        },
+                        "inclusion": [
+                            "Available",
+                            "Broken",
+                            "Repair"
+                        ]
+                    },
+                    "name": "Status",
+                    "sortable": false
+                },
+                "SKU": {
+                    "type": "barcodeqr",
+                    "constraints": {
+                        "type": "string",
+                        "length": {},
+                        "presence": false
+                    },
+                    "name": "SKU"
+                },
+                "Purchase Date": {
+                    "type": "datetime",
+                    "constraints": {
+                        "type": "string",
+                        "length": {},
+                        "presence": false,
+                        "datetime": {
+                            "latest": "",
+                            "earliest": ""
+                        }
+                    },
+                    "name": "Purchase Date",
+                    "ignoreTimezones": true
+                },
+                "Purchase Price": {
+                    "type": "number",
+                    "constraints": {
+                        "type": "number",
+                        "presence": false,
+                        "numericality": {
+                            "greaterThanOrEqualTo": null,
+                            "lessThanOrEqualTo": ""
+                        }
+                    },
+                    "name": "Purchase Price"
+                },
+                "Created At": {
+                    "name": "Created At",
+                    "type": "datetime",
+                    "subtype": "createdAt",
+                    "icon": "ri-magic-line",
+                    "autocolumn": true,
+                    "constraints": {
+                        "type": "string",
+                        "length": {},
+                        "presence": false,
+                        "datetime": {
+                            "latest": "",
+                            "earliest": ""
+                        }
+                    }
+                },
+                "Updated At": {
+                    "name": "Updated At",
+                    "type": "datetime",
+                    "subtype": "updatedAt",
+                    "icon": "ri-magic-line",
+                    "autocolumn": true,
+                    "constraints": {
+                        "type": "string",
+                        "length": {},
+                        "presence": false,
+                        "datetime": {
+                            "latest": "",
+                            "earliest": ""
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "_id": "ta_bb_jobs",
+            "_rev": "1-ecc97d05234a1a8f2f48c657f4a9afc5",
+            "type": "internal",
+            "name": "Jobs",
+            "sourceId": "datasource_internal_bb_default",
+            "primaryDisplay": "Job ID",
+            "schema": {
+                "Job ID": {
+                    "name": "Job ID",
+                    "type": "number",
+                    "subtype": "autoID",
+                    "icon": "ri-magic-line",
+                    "autocolumn": true,
+                    "constraints": {
+                        "type": "number",
+                        "presence": false,
+                        "numericality": {
+                            "greaterThanOrEqualTo": "",
+                            "lessThanOrEqualTo": ""
+                        }
+                    },
+                    "lastID": 10
+                },
+                "Quote Date": {
+                    "type": "datetime",
+                    "constraints": {
+                        "type": "string",
+                        "length": {},
+                        "presence": {
+                            "allowEmpty": false
+                        },
+                        "datetime": {
+                            "latest": "",
+                            "earliest": ""
+                        }
+                    },
+                    "name": "Quote Date",
+                    "ignoreTimezones": true
+                },
+                "Quote Price": {
+                    "type": "number",
+                    "constraints": {
+                        "type": "number",
+                        "presence": {
+                            "allowEmpty": false
+                        },
+                        "numericality": {
+                            "greaterThanOrEqualTo": "",
+                            "lessThanOrEqualTo": ""
+                        }
+                    },
+                    "name": "Quote Price"
+                },
+                "Works Start": {
+                    "type": "datetime",
+                    "constraints": {
+                        "type": "string",
+                        "length": {},
+                        "presence": false,
+                        "datetime": {
+                            "latest": "",
+                            "earliest": ""
+                        }
+                    },
+                    "name": "Works Start",
+                    "ignoreTimezones": true
+                },
+                "Address": {
+                    "type": "longform",
+                    "constraints": {
+                        "type": "string",
+                        "length": {},
+                        "presence": false
+                    },
+                    "name": "Address",
+                    "useRichText": null
+                },
+                "Customer Name": {
+                    "type": "string",
+                    "constraints": {
+                        "type": "string",
+                        "length": {
+                            "maximum": null
+                        },
+                        "presence": false
+                    },
+                    "name": "Customer Name"
+                },
+                "Notes": {
+                    "type": "longform",
+                    "constraints": {
+                        "type": "string",
+                        "length": {},
+                        "presence": false
+                    },
+                    "name": "Notes",
+                    "useRichText": null
+                },
+                "Customer Phone": {
+                    "type": "string",
+                    "constraints": {
+                        "type": "string",
+                        "length": {
+                            "maximum": null
+                        },
+                        "presence": false
+                    },
+                    "name": "Customer Phone"
+                },
+                "Customer Email": {
+                    "type": "string",
+                    "constraints": {
+                        "type": "string",
+                        "length": {
+                            "maximum": null
+                        },
+                        "presence": false
+                    },
+                    "name": "Customer Email"
+                },
+                "Assigned": {
+                    "name": "Assigned",
+                    "type": "link",
+                    "tableId": "ta_bb_employee",
+                    "fieldName": "Jobs",
+                    "relationshipType": "many-to-many"
+                },
+                "Works End": {
+                    "type": "datetime",
+                    "constraints": {
+                        "type": "string",
+                        "length": {},
+                        "presence": false,
+                        "datetime": {
+                            "latest": "",
+                            "earliest": ""
+                        }
+                    },
+                    "name": "Works End",
+                    "ignoreTimezones": true
+                },
+                "Updated Price": {
+                    "type": "number",
+                    "constraints": {
+                        "type": "number",
+                        "presence": false,
+                        "numericality": {
+                            "greaterThanOrEqualTo": "",
+                            "lessThanOrEqualTo": ""
+                        }
+                    },
+                    "name": "Updated Price"
+                },
+                "Created At": {
+                    "name": "Created At",
+                    "type": "datetime",
+                    "subtype": "createdAt",
+                    "icon": "ri-magic-line",
+                    "autocolumn": true,
+                    "constraints": {
+                        "type": "string",
+                        "length": {},
+                        "presence": false,
+                        "datetime": {
+                            "latest": "",
+                            "earliest": ""
+                        }
+                    }
+                },
+                "Updated At": {
+                    "name": "Updated At",
+                    "type": "datetime",
+                    "subtype": "updatedAt",
+                    "icon": "ri-magic-line",
+                    "autocolumn": true,
+                    "constraints": {
+                        "type": "string",
+                        "length": {},
+                        "presence": false,
+                        "datetime": {
+                            "latest": "",
+                            "earliest": ""
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "_id": "ta_users",
+            "_rev": "1-a21b91dc06a32baaca04e1894cdfe3aa",
+            "type": "table",
+            "views": {},
+            "name": "Users",
+            "schema": {
+                "email": {
+                    "type": "string",
+                    "constraints": {
+                        "type": "string",
+                        "email": true,
+                        "length": {
+                            "maximum": ""
+                        },
+                        "presence": true
+                    },
+                    "fieldName": "email",
+                    "name": "email"
+                },
+                "firstName": {
+                    "name": "firstName",
+                    "fieldName": "firstName",
+                    "type": "string",
+                    "constraints": {
+                        "type": "string",
+                        "presence": false
+                    }
+                },
+                "lastName": {
+                    "name": "lastName",
+                    "fieldName": "lastName",
+                    "type": "string",
+                    "constraints": {
+                        "type": "string",
+                        "presence": false
+                    }
+                },
+                "roleId": {
+                    "fieldName": "roleId",
+                    "name": "roleId",
+                    "type": "options",
+                    "constraints": {
+                        "type": "string",
+                        "presence": false,
+                        "inclusion": [
+                            "ADMIN",
+                            "POWER",
+                            "BASIC",
+                            "PUBLIC"
+                        ]
+                    }
+                },
+                "status": {
+                    "fieldName": "status",
+                    "name": "status",
+                    "type": "options",
+                    "constraints": {
+                        "type": "string",
+                        "presence": false,
+                        "inclusion": [
+                            "active",
+                            "inactive"
+                        ]
+                    }
+                }
+            },
+            "primaryDisplay": "email",
+            "createdAt": "2023-05-30T15:14:19.522Z",
+            "updatedAt": "2023-05-30T15:14:19.522Z"
+        }
+    ]
+}
+{
+    "seq": "212-g1AAAACbeJzLYWBgYMpgTmEQTM4vTc5ISXIwNDLXMwBCwxyQVCJDUv3___-zMpgTK3KBAuypBobJaYmm2DTgMSaPBUgyNACp_1DTYsCmpRmamRukpGDTlwUAePspew"
+}
