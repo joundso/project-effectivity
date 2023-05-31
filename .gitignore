@@ -11,6 +11,14 @@
 /.github/workflows/*
 !/.github/workflows/*.yml
 
+!/data/
+/data/*
+!/data/init.sql
+!/data/pgadmin_db_schema.json
+!/data/pgadmin_db_schema.png
+!/data/pgadmin_servers.json
+!/data/test.sql
+
 !/docker/
 /docker/*
 !/docker/*_docker-compose.yaml
