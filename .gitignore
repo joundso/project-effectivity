@@ -31,6 +31,7 @@
 !/docker/
 /docker/*
 !/docker/*_docker-compose.yaml
+!/docker/budibase.env
 
 !/.env
 

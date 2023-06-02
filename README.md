@@ -19,8 +19,15 @@ The pathway to this project setup:
       2. Port `5432`
       3. Username as POSTGRES_USER, by default: `postgres`
       4. Password as POSTGRES_PASSWORD, by default `changeme`
-   5. 
 
+### Budibase
+
+- To compress app files for the budibase import:
+
+    ```bash
+    cd ./data/budibase/
+    tar -zcvf ../app.tar.gz *
+    ```
 
 ## Further readings and thanks
 
