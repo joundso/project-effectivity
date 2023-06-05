@@ -324,8 +324,8 @@ ALTER TABLE ONLY app.time_efforts ALTER COLUMN id SET DEFAULT nextval('app.time_
 -- Data for Name: employee_class; Type: TABLE DATA; Schema: app; Owner: postgres
 --
 
-INSERT INTO app.employee_class (id, class_name, hourly_rate_eur) VALUES (1, '50 €/h', 50);
-INSERT INTO app.employee_class (id, class_name, hourly_rate_eur) VALUES (2, '72,25 €/h', 72.25);
+INSERT INTO app.employee_class (id, class_name, hourly_rate_eur) VALUES (DEFAULT, '50 €/h', 50);
+INSERT INTO app.employee_class (id, class_name, hourly_rate_eur) VALUES (DEFAULT, '72,25 €/h', 72.25);
 
 
 --
@@ -334,8 +334,8 @@ INSERT INTO app.employee_class (id, class_name, hourly_rate_eur) VALUES (2, '72,
 -- Data for Name: employees; Type: TABLE DATA; Schema: app; Owner: postgres
 --
 
-INSERT INTO app.employees (id, first_name, last_name, employee_class) VALUES (1, 'Max', 'Mustermann', 1);
-INSERT INTO app.employees (id, first_name, last_name, employee_class) VALUES (2, 'Alice', 'Musterfrau', 2);
+INSERT INTO app.employees (id, first_name, last_name, employee_class) VALUES (DEFAULT, 'Max', 'Mustermann', 1);
+INSERT INTO app.employees (id, first_name, last_name, employee_class) VALUES (DEFAULT, 'Alice', 'Musterfrau', 2);
 
 
 --
@@ -344,8 +344,8 @@ INSERT INTO app.employees (id, first_name, last_name, employee_class) VALUES (2,
 -- Data for Name: invest_efforts; Type: TABLE DATA; Schema: app; Owner: postgres
 --
 
-INSERT INTO app.invest_efforts (id, project_id, invest_eur, description, datetime) VALUES (1, 1, 10000.12, NULL, '2023-05-03 10:00:00+00');
-INSERT INTO app.invest_efforts (id, project_id, invest_eur, description, datetime) VALUES (2, 2, 80000.99, 'Verlustinvestition', '2023-05-16 10:00:00+00');
+INSERT INTO app.invest_efforts (id, project_id, invest_eur, description, datetime) VALUES (DEFAULT, 1, 10000.12, NULL, '2023-05-03 10:00:00+00');
+INSERT INTO app.invest_efforts (id, project_id, invest_eur, description, datetime) VALUES (DEFAULT, 2, 80000.99, 'Verlustinvestition', '2023-05-16 10:00:00+00');
 
 
 --
@@ -354,8 +354,8 @@ INSERT INTO app.invest_efforts (id, project_id, invest_eur, description, datetim
 -- Data for Name: projects; Type: TABLE DATA; Schema: app; Owner: postgres
 --
 
-INSERT INTO app.projects (id, project_name, project_reference, sales_price_eur, project_start, project_end, closed) VALUES (1, 'Gewinnprojekt', NULL, 50000.99, '2023-05-01 10:00:00+00', '2023-06-03 10:00:00+00', false);
-INSERT INTO app.projects (id, project_name, project_reference, sales_price_eur, project_start, project_end, closed) VALUES (2, 'Verlustprojekt', NULL, 10000.25, '2023-05-01 10:00:00+00', '2023-05-31 10:00:00+00', false);
+INSERT INTO app.projects (id, project_name, project_reference, sales_price_eur, project_start, project_end, closed) VALUES (DEFAULT, 'Gewinnprojekt', NULL, 50000.99, '2023-05-01 10:00:00+00', '2023-06-03 10:00:00+00', false);
+INSERT INTO app.projects (id, project_name, project_reference, sales_price_eur, project_start, project_end, closed) VALUES (DEFAULT, 'Verlustprojekt', NULL, 10000.25, '2023-05-01 10:00:00+00', '2023-05-31 10:00:00+00', false);
 
 
 --
@@ -364,36 +364,36 @@ INSERT INTO app.projects (id, project_name, project_reference, sales_price_eur, 
 -- Data for Name: time_efforts; Type: TABLE DATA; Schema: app; Owner: postgres
 --
 
-INSERT INTO app.time_efforts (id, employee_id, project_id, time_spent_h, description, datetime) VALUES (1, 1, 1, 20.5, NULL, '2023-05-10 10:00:00+00');
-INSERT INTO app.time_efforts (id, employee_id, project_id, time_spent_h, description, datetime) VALUES (2, 2, 1, 10.75, NULL, '2023-05-18 10:00:00+00');
-INSERT INTO app.time_efforts (id, employee_id, project_id, time_spent_h, description, datetime) VALUES (4, 1, 1, 6, NULL, '2023-05-04 10:00:00+00');
-INSERT INTO app.time_efforts (id, employee_id, project_id, time_spent_h, description, datetime) VALUES (5, 2, 1, 9.25, NULL, '2023-05-05 10:00:00+00');
-INSERT INTO app.time_efforts (id, employee_id, project_id, time_spent_h, description, datetime) VALUES (7, 1, 1, 10, NULL, '2023-05-07 10:00:00+00');
-INSERT INTO app.time_efforts (id, employee_id, project_id, time_spent_h, description, datetime) VALUES (8, 2, 1, 5.5, NULL, '2023-05-08 10:00:00+00');
-INSERT INTO app.time_efforts (id, employee_id, project_id, time_spent_h, description, datetime) VALUES (10, 1, 1, 7.25, NULL, '2023-05-10 10:00:00+00');
-INSERT INTO app.time_efforts (id, employee_id, project_id, time_spent_h, description, datetime) VALUES (11, 2, 1, 5.25, NULL, '2023-05-11 10:00:00+00');
-INSERT INTO app.time_efforts (id, employee_id, project_id, time_spent_h, description, datetime) VALUES (13, 1, 1, 0.5, NULL, '2023-05-13 10:00:00+00');
-INSERT INTO app.time_efforts (id, employee_id, project_id, time_spent_h, description, datetime) VALUES (14, 2, 1, 8, NULL, '2023-05-14 10:00:00+00');
-INSERT INTO app.time_efforts (id, employee_id, project_id, time_spent_h, description, datetime) VALUES (16, 1, 1, 5.5, NULL, '2023-05-16 10:00:00+00');
-INSERT INTO app.time_efforts (id, employee_id, project_id, time_spent_h, description, datetime) VALUES (17, 2, 1, 2, NULL, '2023-05-17 10:00:00+00');
-INSERT INTO app.time_efforts (id, employee_id, project_id, time_spent_h, description, datetime) VALUES (19, 1, 1, 7.5, NULL, '2023-05-19 10:00:00+00');
-INSERT INTO app.time_efforts (id, employee_id, project_id, time_spent_h, description, datetime) VALUES (20, 2, 1, 0.5, NULL, '2023-05-20 10:00:00+00');
-INSERT INTO app.time_efforts (id, employee_id, project_id, time_spent_h, description, datetime) VALUES (22, 1, 1, 4.25, NULL, '2023-05-22 10:00:00+00');
-INSERT INTO app.time_efforts (id, employee_id, project_id, time_spent_h, description, datetime) VALUES (23, 2, 1, 4.75, NULL, '2023-05-23 10:00:00+00');
-INSERT INTO app.time_efforts (id, employee_id, project_id, time_spent_h, description, datetime) VALUES (25, 1, 1, 2.5, NULL, '2023-05-25 10:00:00+00');
-INSERT INTO app.time_efforts (id, employee_id, project_id, time_spent_h, description, datetime) VALUES (26, 2, 1, 2.25, NULL, '2023-05-26 10:00:00+00');
-INSERT INTO app.time_efforts (id, employee_id, project_id, time_spent_h, description, datetime) VALUES (28, 1, 1, 1.75, NULL, '2023-05-28 10:00:00+00');
-INSERT INTO app.time_efforts (id, employee_id, project_id, time_spent_h, description, datetime) VALUES (29, 2, 1, 5.25, NULL, '2023-05-29 10:00:00+00');
-INSERT INTO app.time_efforts (id, employee_id, project_id, time_spent_h, description, datetime) VALUES (27, 1, 2, 7.5, NULL, '2023-05-27 10:00:00+00');
-INSERT INTO app.time_efforts (id, employee_id, project_id, time_spent_h, description, datetime) VALUES (9, 1, 2, 2, NULL, '2023-05-09 10:00:00+00');
-INSERT INTO app.time_efforts (id, employee_id, project_id, time_spent_h, description, datetime) VALUES (21, 1, 2, 2.5, NULL, '2023-05-21 10:00:00+00');
-INSERT INTO app.time_efforts (id, employee_id, project_id, time_spent_h, description, datetime) VALUES (3, 1, 2, 15, NULL, '2023-05-25 10:00:00+00');
-INSERT INTO app.time_efforts (id, employee_id, project_id, time_spent_h, description, datetime) VALUES (15, 1, 2, 1, NULL, '2023-05-15 10:00:00+00');
-INSERT INTO app.time_efforts (id, employee_id, project_id, time_spent_h, description, datetime) VALUES (30, 1, 2, 5.25, NULL, '2023-05-30 10:00:00+00');
-INSERT INTO app.time_efforts (id, employee_id, project_id, time_spent_h, description, datetime) VALUES (12, 1, 2, 9.25, NULL, '2023-05-12 10:00:00+00');
-INSERT INTO app.time_efforts (id, employee_id, project_id, time_spent_h, description, datetime) VALUES (24, 1, 2, 2.5, NULL, '2023-05-24 10:00:00+00');
-INSERT INTO app.time_efforts (id, employee_id, project_id, time_spent_h, description, datetime) VALUES (6, 1, 2, 8.75, NULL, '2023-05-06 10:00:00+00');
-INSERT INTO app.time_efforts (id, employee_id, project_id, time_spent_h, description, datetime) VALUES (18, 1, 2, 9.25, NULL, '2023-05-18 10:00:00+00');
+INSERT INTO app.time_efforts (id, employee_id, project_id, time_spent_h, description, datetime) VALUES (DEFAULT, 1, 1, 20.5, NULL, '2023-05-10 10:00:00+00');
+INSERT INTO app.time_efforts (id, employee_id, project_id, time_spent_h, description, datetime) VALUES (DEFAULT, 2, 1, 10.75, NULL, '2023-05-18 10:00:00+00');
+INSERT INTO app.time_efforts (id, employee_id, project_id, time_spent_h, description, datetime) VALUES (DEFAULT, 1, 1, 6, NULL, '2023-05-04 10:00:00+00');
+INSERT INTO app.time_efforts (id, employee_id, project_id, time_spent_h, description, datetime) VALUES (DEFAULT, 2, 1, 9.25, NULL, '2023-05-05 10:00:00+00');
+INSERT INTO app.time_efforts (id, employee_id, project_id, time_spent_h, description, datetime) VALUES (DEFAULT, 1, 1, 10, NULL, '2023-05-07 10:00:00+00');
+INSERT INTO app.time_efforts (id, employee_id, project_id, time_spent_h, description, datetime) VALUES (DEFAULT, 2, 1, 5.5, NULL, '2023-05-08 10:00:00+00');
+INSERT INTO app.time_efforts (id, employee_id, project_id, time_spent_h, description, datetime) VALUES (DEFAULT, 1, 1, 7.25, NULL, '2023-05-10 10:00:00+00');
+INSERT INTO app.time_efforts (id, employee_id, project_id, time_spent_h, description, datetime) VALUES (DEFAULT, 2, 1, 5.25, NULL, '2023-05-11 10:00:00+00');
+INSERT INTO app.time_efforts (id, employee_id, project_id, time_spent_h, description, datetime) VALUES (DEFAULT, 1, 1, 0.5, NULL, '2023-05-13 10:00:00+00');
+INSERT INTO app.time_efforts (id, employee_id, project_id, time_spent_h, description, datetime) VALUES (DEFAULT, 2, 1, 8, NULL, '2023-05-14 10:00:00+00');
+INSERT INTO app.time_efforts (id, employee_id, project_id, time_spent_h, description, datetime) VALUES (DEFAULT, 1, 1, 5.5, NULL, '2023-05-16 10:00:00+00');
+INSERT INTO app.time_efforts (id, employee_id, project_id, time_spent_h, description, datetime) VALUES (DEFAULT, 2, 1, 2, NULL, '2023-05-17 10:00:00+00');
+INSERT INTO app.time_efforts (id, employee_id, project_id, time_spent_h, description, datetime) VALUES (DEFAULT, 1, 1, 7.5, NULL, '2023-05-19 10:00:00+00');
+INSERT INTO app.time_efforts (id, employee_id, project_id, time_spent_h, description, datetime) VALUES (DEFAULT, 2, 1, 0.5, NULL, '2023-05-20 10:00:00+00');
+INSERT INTO app.time_efforts (id, employee_id, project_id, time_spent_h, description, datetime) VALUES (DEFAULT, 1, 1, 4.25, NULL, '2023-05-22 10:00:00+00');
+INSERT INTO app.time_efforts (id, employee_id, project_id, time_spent_h, description, datetime) VALUES (DEFAULT, 2, 1, 4.75, NULL, '2023-05-23 10:00:00+00');
+INSERT INTO app.time_efforts (id, employee_id, project_id, time_spent_h, description, datetime) VALUES (DEFAULT, 1, 1, 2.5, NULL, '2023-05-25 10:00:00+00');
+INSERT INTO app.time_efforts (id, employee_id, project_id, time_spent_h, description, datetime) VALUES (DEFAULT, 2, 1, 2.25, NULL, '2023-05-26 10:00:00+00');
+INSERT INTO app.time_efforts (id, employee_id, project_id, time_spent_h, description, datetime) VALUES (DEFAULT, 1, 1, 1.75, NULL, '2023-05-28 10:00:00+00');
+INSERT INTO app.time_efforts (id, employee_id, project_id, time_spent_h, description, datetime) VALUES (DEFAULT, 2, 1, 5.25, NULL, '2023-05-29 10:00:00+00');
+INSERT INTO app.time_efforts (id, employee_id, project_id, time_spent_h, description, datetime) VALUES (DEFAULT, 1, 2, 7.5, NULL, '2023-05-27 10:00:00+00');
+INSERT INTO app.time_efforts (id, employee_id, project_id, time_spent_h, description, datetime) VALUES (DEFAULT, 1, 2, 2, NULL, '2023-05-09 10:00:00+00');
+INSERT INTO app.time_efforts (id, employee_id, project_id, time_spent_h, description, datetime) VALUES (DEFAULT, 1, 2, 2.5, NULL, '2023-05-21 10:00:00+00');
+INSERT INTO app.time_efforts (id, employee_id, project_id, time_spent_h, description, datetime) VALUES (DEFAULT, 1, 2, 15, NULL, '2023-05-25 10:00:00+00');
+INSERT INTO app.time_efforts (id, employee_id, project_id, time_spent_h, description, datetime) VALUES (DEFAULT, 1, 2, 1, NULL, '2023-05-15 10:00:00+00');
+INSERT INTO app.time_efforts (id, employee_id, project_id, time_spent_h, description, datetime) VALUES (DEFAULT, 1, 2, 5.25, NULL, '2023-05-30 10:00:00+00');
+INSERT INTO app.time_efforts (id, employee_id, project_id, time_spent_h, description, datetime) VALUES (DEFAULT, 1, 2, 9.25, NULL, '2023-05-12 10:00:00+00');
+INSERT INTO app.time_efforts (id, employee_id, project_id, time_spent_h, description, datetime) VALUES (DEFAULT, 1, 2, 2.5, NULL, '2023-05-24 10:00:00+00');
+INSERT INTO app.time_efforts (id, employee_id, project_id, time_spent_h, description, datetime) VALUES (DEFAULT, 1, 2, 8.75, NULL, '2023-05-06 10:00:00+00');
+INSERT INTO app.time_efforts (id, employee_id, project_id, time_spent_h, description, datetime) VALUES (DEFAULT, 1, 2, 9.25, NULL, '2023-05-18 10:00:00+00');
 
 
 --
