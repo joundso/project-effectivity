@@ -4,6 +4,8 @@
 !/.gitignore
 !/NEWS.md
 !/README.md
+!/start.sh
+!/stop.sh
 
 !/.github
 /.github/*
@@ -32,6 +34,8 @@
 /docker/*
 !/docker/*_docker-compose.yaml
 !/docker/budibase.env
+!/docker/start_postgres.sh
+!/docker/stop_postgres.sh
 
 !/.env
 
