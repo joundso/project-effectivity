@@ -34,8 +34,11 @@
 /docker/*
 !/docker/*_docker-compose.yaml
 !/docker/budibase.env
-!/docker/start_postgres.sh
-!/docker/stop_postgres.sh
+!/docker/postgres.env
+!/docker/start_budibase_dev.sh
+!/docker/start_postgres_dev.sh
+!/docker/stop_budibase_dev.sh
+!/docker/stop_postgres_dev.sh
 
 !/.env
 
